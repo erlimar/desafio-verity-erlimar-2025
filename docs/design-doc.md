@@ -47,9 +47,23 @@ gerenciará nossa fila de mensagem para comunicação entre os serviços
 
 > TODO
 
-## Anotações gerais
+### Diagrama de infraestrutura em produção
 
 > TODO
+
+## Anotações gerais
+
+- Não implementamos um mecanismo de registro de usuários devido ao tempo
+disponível para implementação da solução, portanto está fora do escopo. Mas
+em uma situação real ou a aplicação permitiria o *auto-registro* de usuários,
+ou um outro serviço faria essa gestão (*back office* por exemplo).
+- A implementação atual não entrega artefatos nem guias para implantação em
+ambiente de produção devido ao tempo disponível para concepção da solução. Mas
+uma ideia de como seria a infraestrutura de produção é apresentada para que
+se tenha a visão de que alguns requisitos da aplicação são atendidos através
+de outros componentes que não estão presentes em código de aplicativo. Tais
+como WAF para proteção contra ataques, balanceamento de carga e múltiplas
+regiões de implantação para alta disponibilidade.
 
 
 [OPENID_CONNECT]: https://openid.net/developers/how-connect-works
