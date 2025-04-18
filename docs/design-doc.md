@@ -4,7 +4,7 @@ Um comerciante precisa controlar o seu fluxo de caixa diário com os lançamento
 (débitos e créditos), também precisa de um relatório que disponibilize o saldo
 diário consolidado
 
-# Solução
+## Solução
 
 Um aplicativo web será construído para que o usuário possa visualizar e manter
 seu fluxo de caixa através de lançamentos de débito e crédito, além de poder
@@ -31,7 +31,7 @@ Abaixo temos uma ideia geral dos componentes da solução:
 ![](images/diagrama-componentes.png)
 
 
-# Decisões de design
+## Decisões de design
 
 Quanto a tecnologias:
 
@@ -43,11 +43,11 @@ por ser uma ferramenta pronta para produção e bastante conhecida no mercado
 - Usaremos o [RabbitMQ][RABBITMQ] como [*Message broker*][MESSAGE_BROKER] que
 gerenciará nossa fila de mensagem para comunicação entre os serviços
 
-# Detalhes do design
+## Detalhes do design
 
 > TODO
 
-# Anotações gerais
+## Anotações gerais
 
 > TODO
 
