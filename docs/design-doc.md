@@ -13,25 +13,25 @@ diário consolidado
 
 Será construída uma solução para *Fluxo de Caixa* que contenha:
 
-- Um aplicativo web será construído para que o usuário possa visualizar e
-  manter seu fluxo de caixa através de lançamentos de débito e crédito, além de
-  poder solicitar e visualizar relatórios de consolidação de saldo diário.
+- Um aplicativo web para que o usuário possa visualizar e manter seu fluxo de
+  caixa através de lançamentos de débito e crédito, além de poder solicitar e
+  visualizar relatórios de consolidação de saldo diário.
+
+- Todo registro será feito por uma API Web que garantirá consistência de regras
+  de negócio do lado do servidor e manterá os dados em um banco não relacional.
 
 - O cálculo dos dados para o relatório consolidado será feito por um serviço
   executando em segundo e de forma independente da API Web. A comunicação
   entre esses componentes será feita através de um mecanismo assíncrono de
   mensagens.
 
-- Todo registro será feito por uma API Web que garantirá consistência de regras
-  de negócio do lado do servidor e manterá os dados em um banco não relacional.
-
 - Tanto o aplicativo Web quanto a API Web estarão protegidos por um serviço de
   identidade centralizado que usa o protocolo de autenticação/autorização
   [OpenID Connect][OPENID_CONNECT].
 
-- Caso o serviço de cálculo de dados para os relatórios pare de funcionar, a
-  aplicação web continuará funcionando, porém sem a possibilidade de geração de
-  relatórios consolidados de saldo diário.
+> Caso o serviço de cálculo de dados para os relatórios pare de funcionar, a
+> aplicação web continuará funcionando, porém sem a possibilidade de geração de
+> relatórios consolidados de saldo diário.
 
 Abaixo temos uma ideia geral dos componentes da solução:
 
