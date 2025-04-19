@@ -4,27 +4,34 @@ Um comerciante precisa controlar o seu fluxo de caixa diário com os lançamento
 (débitos e créditos), também precisa de um relatório que disponibilize o saldo
 diário consolidado
 
+## Requisitos de negócio
+
+- Serviço que faça o controle de lançamentos
+- Serviço do consolidado diário
+
 ## Solução
 
-Um aplicativo web será construído para que o usuário possa visualizar e manter
-seu fluxo de caixa através de lançamentos de débito e crédito, além de poder
-solicitar e visualizar relatórios de consolidação de saldo diário.
+Será construída uma solução para *Fluxo de Caixa* que contenha:
 
-Todo registro será feito por uma API Web que garantirá consistência de regras
-de negócio do lado do servidor e manterá os dados em um banco não relacional.
+- Um aplicativo web será construído para que o usuário possa visualizar e
+  manter seu fluxo de caixa através de lançamentos de débito e crédito, além de
+  poder solicitar e visualizar relatórios de consolidação de saldo diário.
 
-Tanto o aplicativo Web quanto a API Web estarão protegidos por um serviço de
-identidade centralizado que usa o protocolo de autenticação/autorização
-[OpenID Connect][OPENID_CONNECT].
+- O cálculo dos dados para o relatório consolidado será feito por um serviço
+  executando em segundo e de forma independente da API Web. A comunicação
+  entre esses componentes será feita através de um mecanismo assíncrono de
+  mensagens.
 
-O cálculo dos dados para o relatório consolidado será feito por um serviço
-executando em segundo e de forma independente da API Web. A comunicação
-entre esses componentes será feita através de um mecanismo assíncrono de
-mensagens.
+- Todo registro será feito por uma API Web que garantirá consistência de regras
+  de negócio do lado do servidor e manterá os dados em um banco não relacional.
 
-Caso o serviço de cálculo de dados para os relatórios pare de funcionar, a
-aplicação web continuará funcionando, porém sem a possibilidade de geração de
-relatórios consolidados de saldo diário.
+- Tanto o aplicativo Web quanto a API Web estarão protegidos por um serviço de
+  identidade centralizado que usa o protocolo de autenticação/autorização
+  [OpenID Connect][OPENID_CONNECT].
+
+- Caso o serviço de cálculo de dados para os relatórios pare de funcionar, a
+  aplicação web continuará funcionando, porém sem a possibilidade de geração de
+  relatórios consolidados de saldo diário.
 
 Abaixo temos uma ideia geral dos componentes da solução:
 
@@ -43,9 +50,29 @@ por ser uma ferramenta pronta para produção e bastante conhecida no mercado
 - Usaremos o [RabbitMQ][RABBITMQ] como [*Message broker*][MESSAGE_BROKER] que
 gerenciará nossa fila de mensagem para comunicação entre os serviços
 
-## Detalhes do design
+## Detalhes da solução
 
-> TODO
+Serão construídos os seguintes casos de uso:
+
+![](images/casos-de-uso.png)
+
+### Autenticar usuário
+
+![](images/caso-de-uso-autenticar-usuario.png)
+
+O usuário não se autenticará diretamente na aplicação web, ao invés disso a
+mesma irá redirecionar o usuário para se autenticar no serviço de identidade
+[Keycloak][KEYCLOAK], que cuidará de toda a parte de segurança para autenticar
+corretamente o usuário, e ao final redirecioná-lo já autenticado para a
+aplicação.
+
+### Registrar lançamento
+
+### Visualizar lançamentos
+
+### calcular consolidação diária
+
+### Visualizar consolidação diária
 
 ### Diagrama de infraestrutura em produção
 
