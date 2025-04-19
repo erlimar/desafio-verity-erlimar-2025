@@ -57,7 +57,13 @@ aplicação.
 
 ### Visualizar lançamentos
 
-### calcular consolidação diária
+![](images/caso-de-uso-visualizar-lancamentos.png)
+
+O usuário autenticado poderá visualizar os lançamentos que já fez. Esses serão
+servidos pela API de forma paginada para evitar sobrecarga aos serviços, além
+de serem ordenados por data/hora.
+
+### Calcular consolidação diária
 
 ### Visualizar consolidação diária
 
@@ -67,7 +73,7 @@ aplicação.
 
 ## Anotações gerais
 
-> Conheça as decisões arquiteturais em [decisoes.md](decisoes.md).
+> Conheça as decisões de design em [decisoes.md](decisoes.md).
 
 - Não implementamos um mecanismo de registro de usuários devido ao tempo
 disponível para implementação da solução, portanto está fora do escopo. Mas
