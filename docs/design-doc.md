@@ -33,22 +33,9 @@ Será construída uma solução para *Fluxo de Caixa* que contenha:
 > aplicação web continuará funcionando, porém sem a possibilidade de geração de
 > relatórios consolidados de saldo diário.
 
-Abaixo temos uma ideia geral dos componentes da solução:
+Abaixo temos uma ideia geral dos componentes da solução e a interação entre eles:
 
 ![](images/diagrama-componentes.png)
-
-
-## Decisões de design
-
-Quanto a tecnologias:
-
-- Usaremos [Keycloak][KEYCLOAK] como serviço de identidade por
-se tratar de um componente de mercado já pronto para produção e que implementa
-de forma certificada o padrão [OpenID Connect][OPENID_CONNECT] como precisamos
-- Usaremos o [MongoDB][MONGODB] como solução de banco de dados não relacional
-por ser uma ferramenta pronta para produção e bastante conhecida no mercado
-- Usaremos o [RabbitMQ][RABBITMQ] como [*Message broker*][MESSAGE_BROKER] que
-gerenciará nossa fila de mensagem para comunicação entre os serviços
 
 ## Detalhes da solução
 
@@ -79,6 +66,8 @@ aplicação.
 > TODO
 
 ## Anotações gerais
+
+> Conheça as decisões arquiteturais em [decisoes.md](decisoes.md).
 
 - Não implementamos um mecanismo de registro de usuários devido ao tempo
 disponível para implementação da solução, portanto está fora do escopo. Mas
