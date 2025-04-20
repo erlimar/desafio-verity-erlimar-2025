@@ -55,6 +55,25 @@ aplicação.
 
 ### Registrar lançamento
 
+![](images/caso-de-uso-registrar-lancamento.png)
+
+O usuário autenticado poderá registrar um lançamento informando seus dados:
+
+- Data e hora do lançamento
+- Descrição do lançamento
+- Tipo que pode ser _Crédito_ ou _Débito_
+- Valor do lançamento em reais
+
+Esses serão registrados por uma Web API para garantir a integridade da
+informação, considerando:
+
+- Não deve ser permitido o registro de mais de um lançamento com mesmo tipo,
+  descrição, data e hora
+
+- Caso haja uma cosolidação já registrada para o dia do lançamento, essa
+  deve ser invalidada, e uma mensagem para o serviço **Consolidado** deve ser
+  emitida para que o cálculo seja refeito.
+
 ### Visualizar lançamentos
 
 ![](images/caso-de-uso-visualizar-lancamentos.png)
@@ -68,13 +87,14 @@ de serem ordenados por data/hora.
 ![](images/caso-de-uso-calcular-consolidacao-diaria.png)
 
 O usuário autenticado poderá solicitar a visualização do consolidado diário em
-um dia específico. Não iremos fazer uma consulta que calcule os valores em
-tempo de consulta. Ao invés disso, o usuário deve informar o dia que deseja ver
-o saldo consolidado, e uma entrada será criada para indicar isso, porém o saldo
-permanecerá pendente até que seja calculado de fato.
+um dia específico. Não iremos fazer o cálculo do saldo consolidado em tempo de
+consulta por questões de _performance_. Ao invés disso, o usuário deve informar
+o dia que deseja ver o saldo consolidado, e uma entrada será criada para indicar
+isso, porém o saldo permanecerá pendente até que seja calculado de fato por um
+serviço em execução em segundo plano.
 
-Um serviço específico fará o cálculo em segundo plano, e será notificado pela
-Web API através de um [_broker de mensagens_][MESSAGE_BROKER].
+O serviço saberá o que calcular através de mensagens recebidas da Web API
+através de fila em um [_broker de mensagens_][MESSAGE_BROKER].
 
 ### Visualizar consolidação diária
 
@@ -82,9 +102,9 @@ Web API através de um [_broker de mensagens_][MESSAGE_BROKER].
 
 O usuário autenticado poderá visualizar o saldo consolidado diário. Para isso
 precisará selecionar um dia que já tenha solicitado o cálculo, e então
-visualizar os dados já calculados. Caso acesse um dia cujo os dados ainda não
+visualizar os dados consolidados. Caso acesse um dia cujo os dados ainda não
 tenham sido calculados, ele será informado disso para que aguarde e tente
-visualizar novamente depois
+visualizar novamente depois.
 
 > O dado pode não estar disponível caso nunca tenha sido calculado anteriormente,
 > ou caso o serviço de consolidação esteja indisponível, ou ainda se o dado já
