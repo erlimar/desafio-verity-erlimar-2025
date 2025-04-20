@@ -61,8 +61,8 @@ O usuário autenticado poderá registrar um lançamento informando seus dados:
 
 - Data e hora do lançamento
 - Descrição do lançamento
-- Tipo que pode ser _Crédito_ ou _Débito_
-- Valor do lançamento em reais
+- Tipo: _Crédito_ ou _Débito_
+- Valor do lançamento
 
 Esses serão registrados por uma Web API para garantir a integridade da
 informação, considerando:
