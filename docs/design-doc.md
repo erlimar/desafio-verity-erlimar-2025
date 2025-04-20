@@ -2,7 +2,7 @@
 
 Um comerciante precisa controlar o seu fluxo de caixa diário com os lançamentos
 (débitos e créditos), também precisa de um relatório que disponibilize o saldo
-diário consolidado
+diário consolidado.
 
 ## Requisitos de negócio
 
@@ -29,9 +29,9 @@ Será construída uma solução para *Fluxo de Caixa* que contenha:
   identidade centralizado que usa o protocolo de autenticação/autorização
   [OpenID Connect][OPENID_CONNECT].
 
-> Caso o serviço de cálculo de dados para os relatórios pare de funcionar, a
-> aplicação web continuará funcionando, porém sem a possibilidade de geração de
-> relatórios consolidados de saldo diário.
+> Caso o serviço de consolidado pare de funcionar, a aplicação web continuará
+> funcionando, porém sem a possibilidade de geração de relatórios consolidados
+> de saldo diário.
 
 Abaixo temos uma ideia geral dos componentes da solução e a interação entre eles:
 
@@ -67,6 +67,9 @@ O usuário autenticado poderá registrar um lançamento informando seus dados:
 Esses serão registrados por uma Web API para garantir a integridade da
 informação, considerando:
 
+- O registro deve estar sempre vinculado ao usuário dono. E um usuário não pode
+  enxergar os dados de outros usuários.
+
 - Não deve ser permitido o registro de mais de um lançamento com mesmo tipo,
   descrição, data e hora
 
@@ -100,11 +103,11 @@ através de fila em um [_broker de mensagens_][MESSAGE_BROKER].
 
 ![](images/caso-de-uso-visualizar-consolidacao-diaria.png)
 
-O usuário autenticado poderá visualizar o saldo consolidado diário. Para isso
-precisará selecionar um dia que já tenha solicitado o cálculo, e então
-visualizar os dados consolidados. Caso acesse um dia cujo os dados ainda não
-tenham sido calculados, ele será informado disso para que aguarde e tente
-visualizar novamente depois.
+O usuário autenticado poderá visualizar o saldo consolidado diário que já foi
+calculado anteriormente. Para isso precisará selecionar um dia que já tenha
+solicitado o cálculo, e então visualizar os dados consolidados. Caso acesse um
+dia cujo os dados ainda não tenham sido calculados, ele será informado dessa
+situação para que aguarde e tente visualizar novamente mais tarde.
 
 > O dado pode não estar disponível caso nunca tenha sido calculado anteriormente,
 > ou caso o serviço de consolidação esteja indisponível, ou ainda se o dado já
@@ -112,18 +115,45 @@ visualizar novamente depois.
 > saldo tenha sido invalidado, o que o coloca na fila para recalculo
 > automaticamente.
 
-### Diagrama de infraestrutura em produção
+### Diagrama de infraestrutura na AWS
 
-> TODO
+Usaremos os recursos das núvens públicas para complementar os requisitos de
+segurança, escalabilidade e redudância que precisamos.
+
+No diagrama abaixo temos um exemplo de como se daria a implantação em na nuvem
+da [AWS][AWS], mas o mesmo se daria em outras nuvens como [GCP][GCP] ou [OCI][OCI].
+
+![](images/infraestrutura-aws.png)
+
+No diagrama podemos ver principalmente como aplicamos as restrições de segurança
+quanto ao tráfego de entrada permitido. Combinamosm um _Web Application Firewall_
+e o _CloudFront_ para garantir a proteção contra ataques e a segurança do
+tráfego criptografado com _SSL/HTTPS_.
+
+Um _Load Balancer_ se comunica com o _Container Service_ em conjunto com grupos
+de _auto scalling_ para entregar as demandas requisitadas, e escalar
+horizontalmente nossos _containers_ com base na necessidade.
+
+Nossas aplicações reais estão protegidas em redes privadas, e o tráfego ao mundo
+externo é controlado através de configurações de NAT.
+
+Aqui nós substituímos nossos containers de bancos relacionais (Keycloak DB) pelo
+serviço gerenciado compatível, e o mesmo ocorre para filas do _RabbitMQ_, e
+nossas bases não relacionais do _MongoDB_.
+
+Vale ressaltar que optamos pelo serviço de _cluster gerenciado_ do próprio
+_MongoDB_ chamado [_MongoDB Atlas_][MONGODB_ATLAS] porque é totalmente compatível
+com as núvens públicas mencionadas, e a segurança é garantida através de
+emparelhamento seguro de _VPC_.
 
 ## Anotações gerais
-
-> Conheça as decisões de design em [decisoes.md](decisoes.md).
 
 - Não implementamos um mecanismo de registro de usuários devido ao tempo
   disponível para implementação da solução, portanto está fora do escopo.
   Mas em uma situação real ou a aplicação permitiria o *auto-registro* de
   usuários, ou um outro serviço faria essa gestão (*back office* por exemplo).
+  Por hora faremos o registro de usuários diretamente no console do
+  [Keycloak][KEYCLOAK].
 - A implementação atual não entrega artefatos nem guias para implantação em
   ambiente de produção devido ao tempo disponível para concepção da solução.
   Mas uma ideia de como seria a infraestrutura de produção é apresentada para
@@ -147,3 +177,14 @@ visualizar novamente depois.
 [MONGODB]: https://www.mongodb.com
 [WEBSOCKET]: https://developer.mozilla.org/pt-BR/docs/Web/API/WebSockets_API
 [MESSAGE_BROKER]: https://en.wikipedia.org/wiki/Message_broker
+[AWS]:
+  <https://aws.amazon.com/pt>
+  "Amazon Web Services"
+[GCP]:
+  <https://cloud.google.com>
+  "Google Cloud Platform"
+[OCI]:
+  <https://www.oracle.com/br/cloud/compute>
+  "Oracle Cloud Infrastructure"
+[WAF]: https://pt.wikipedia.org/wiki/Web_Application_Firewall
+[MONGODB_ATLAS]: https://www.mongodb.com/atlas
