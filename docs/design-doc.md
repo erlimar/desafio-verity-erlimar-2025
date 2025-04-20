@@ -120,8 +120,8 @@ situação para que aguarde e tente visualizar novamente mais tarde.
 Usaremos os recursos das núvens públicas para complementar os requisitos de
 segurança, escalabilidade e redudância que precisamos.
 
-No diagrama abaixo temos um exemplo de como se daria a implantação em na nuvem
-da [AWS][AWS], mas o mesmo se daria em outras nuvens como [GCP][GCP] ou [OCI][OCI].
+No diagrama abaixo temos um exemplo de como se daria a implantação na nuvem
+da [AWS][AWS]. Mas o mesmo se aplica em outras nuvens como [GCP][GCP] ou [OCI][OCI].
 
 ![](images/infraestrutura-aws.png)
 
@@ -145,6 +145,14 @@ Vale ressaltar que optamos pelo serviço de _cluster gerenciado_ do próprio
 _MongoDB_ chamado [_MongoDB Atlas_][MONGODB_ATLAS] porque é totalmente compatível
 com as núvens públicas mencionadas, e a segurança é garantida através de
 emparelhamento seguro de _VPC_.
+
+Também temos a computação distribuída em duas zonas de disponibilidade (o que
+pode ser mais dependendo de atualização nos requisitos) para atender ao requisito
+de alta disponibilidade, onde os serviços são configurados para estarem em
+execução simultaneamente em pelo menos essas duas zonas.
+
+Também exemplificamos o uso na região de _São Paulo_ caso tenhamos que atender
+a requisitos regulatórios de uso de dados em território nacional apenas.
 
 ## Anotações gerais
 
