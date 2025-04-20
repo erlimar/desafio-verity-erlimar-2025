@@ -78,6 +78,20 @@ Web API através de um [_broker de mensagens_][MESSAGE_BROKER].
 
 ### Visualizar consolidação diária
 
+![](images/caso-de-uso-visualizar-consolidacao-diaria.png)
+
+O usuário autenticado poderá visualizar o saldo consolidado diário. Para isso
+precisará selecionar um dia que já tenha solicitado o cálculo, e então
+visualizar os dados já calculados. Caso acesse um dia cujo os dados ainda não
+tenham sido calculados, ele será informado disso para que aguarde e tente
+visualizar novamente depois
+
+> O dado pode não estar disponível caso nunca tenha sido calculado anteriormente,
+> ou caso o serviço de consolidação esteja indisponível, ou ainda se o dado já
+> tenha sido calculado, mas por uma modificação nos registros daquele dia o
+> saldo tenha sido invalidado, o que o coloca na fila para recalculo
+> automaticamente.
+
 ### Diagrama de infraestrutura em produção
 
 > TODO
