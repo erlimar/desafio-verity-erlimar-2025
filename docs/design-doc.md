@@ -65,6 +65,17 @@ de serem ordenados por data/hora.
 
 ### Calcular consolidação diária
 
+![](images/caso-de-uso-calcular-consolidacao-diaria.png)
+
+O usuário autenticado poderá solicitar a visualização do consolidado diário em
+um dia específico. Não iremos fazer uma consulta que calcule os valores em
+tempo de consulta. Ao invés disso, o usuário deve informar o dia que deseja ver
+o saldo consolidado, e uma entrada será criada para indicar isso, porém o saldo
+permanecerá pendente até que seja calculado de fato.
+
+Um serviço específico fará o cálculo em segundo plano, e será notificado pela
+Web API através de um [_broker de mensagens_][MESSAGE_BROKER].
+
 ### Visualizar consolidação diária
 
 ### Diagrama de infraestrutura em produção
@@ -76,20 +87,29 @@ de serem ordenados por data/hora.
 > Conheça as decisões de design em [decisoes.md](decisoes.md).
 
 - Não implementamos um mecanismo de registro de usuários devido ao tempo
-disponível para implementação da solução, portanto está fora do escopo. Mas
-em uma situação real ou a aplicação permitiria o *auto-registro* de usuários,
-ou um outro serviço faria essa gestão (*back office* por exemplo).
+  disponível para implementação da solução, portanto está fora do escopo.
+  Mas em uma situação real ou a aplicação permitiria o *auto-registro* de
+  usuários, ou um outro serviço faria essa gestão (*back office* por exemplo).
 - A implementação atual não entrega artefatos nem guias para implantação em
-ambiente de produção devido ao tempo disponível para concepção da solução. Mas
-uma ideia de como seria a infraestrutura de produção é apresentada para que
-se tenha a visão de que alguns requisitos da aplicação são atendidos através
-de outros componentes que não estão presentes em código de aplicativo. Tais
-como WAF para proteção contra ataques, balanceamento de carga e múltiplas
-regiões de implantação para alta disponibilidade.
+  ambiente de produção devido ao tempo disponível para concepção da solução.
+  Mas uma ideia de como seria a infraestrutura de produção é apresentada para
+  que se tenha a visão de que alguns requisitos da aplicação são atendidos
+  através de outros componentes que não estão presentes em código de aplicativo.
+  Tais como WAF para proteção contra ataques, balanceamento de carga e múltiplas
+  regiões de implantação para alta disponibilidade.
+- Usamos um banco [MongoDB][MONGODB] compartilhado entre a Web API e o _worker_ Consolidado
+  por questões de prazo, mas em uma situação ideal cada um usaria sua base e
+  fariamos a sincronização também através de mensagens com serviços _side car_.
+- Por questões de prazo não otimizamos a _interface do usuário_ para experiência.
+  O aguardar a geração do relatório pode exigir atualização explícita de tela, o
+  que não é recomendado em um caso real. Nessas situações usaríamos o protocolo
+  [_Web Socket_][WEBSOCKET] para atualizar a _interface do usuário_ em tempo
+  real, de acordo com o relatório seja gerado.
 
 
+<!-- links -->
 [OPENID_CONNECT]: https://openid.net/developers/how-connect-works
 [KEYCLOAK]: https://www.keycloak.org
 [MONGODB]: https://www.mongodb.com
-[RABBITMQ]: https://www.rabbitmq.com
+[WEBSOCKET]: https://developer.mozilla.org/pt-BR/docs/Web/API/WebSockets_API
 [MESSAGE_BROKER]: https://en.wikipedia.org/wiki/Message_broker
