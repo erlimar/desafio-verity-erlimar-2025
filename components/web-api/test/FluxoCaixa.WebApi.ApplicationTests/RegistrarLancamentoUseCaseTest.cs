@@ -1,14 +1,26 @@
 ﻿using FluxoCaixa.WebApi.Application.RegistrarLancamento;
 
+using Moq;
+
 namespace FluxoCaixa.WebApi.ApplicationTests;
 
 [Trait("Target", nameof(RegistrarLancamentoUseCase))]
 public class RegistrarLancamentoUseCaseTest
 {
+    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IIdentityProviderGateway]")]
+    public void CasoDeUsoRequerUmGatewayDoIdentityProviderAsync()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => new RegistrarLancamentoUseCase(null!));
+
+        Assert.Equal("identityProviderGateway", exception.ParamName);
+    }
+
     [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer dados de entrada")]
     public async Task CasoDeUsoRequerDadosDeEntradaAsync()
     {
-        var useCase = new RegistrarLancamentoUseCase();
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => useCase.ExecAsync(null!));
 
         Assert.Equal("form", exception.ParamName);
@@ -20,7 +32,8 @@ public class RegistrarLancamentoUseCaseTest
     [InlineData("  ")]
     public async Task CasoDeUsoRequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
     {
-        var useCase = new RegistrarLancamentoUseCase();
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new(identificadorInvalido!,
                 TipoLancamento.Credito,
@@ -38,7 +51,8 @@ public class RegistrarLancamentoUseCaseTest
     [InlineData("   ")]
     public async Task CasoDeUsoRequerDescricaoValidaAsync(string? descricaoInvalida)
     {
-        var useCase = new RegistrarLancamentoUseCase();
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -57,7 +71,8 @@ public class RegistrarLancamentoUseCaseTest
     [InlineData(-0.000000000001)]
     public async Task CasoDeUsoRequerValorMaiorQueZeroAsync(decimal valorInvalido)
     {
-        var useCase = new RegistrarLancamentoUseCase();
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -67,5 +82,22 @@ public class RegistrarLancamentoUseCaseTest
 
         Assert.Equal("Valor", exception.ParamName);
         Assert.Contains("O valor precisa ser maior que zero", exception.Message);
+    }
+
+    [Fact(DisplayName = "O dono deve existir")]
+    public async Task ODonoDeveExistir()
+    {
+        var identityProviderMock = new Mock<IIdentityProviderGateway>();
+        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object);
+        var exception = await Assert.ThrowsAsync<DonoLancamentoInvalidoException>(
+            () => useCase.ExecAsync(new("codigo-nao-existente",
+                TipoLancamento.Credito,
+                DateTimeOffset.UtcNow,
+                1,
+                "Descricao")));
+
+        Assert.Equal("O dono de lançamento \"codigo-nao-existente\" informado não é válido", exception.Message);
+
+        identityProviderMock.Verify(m => m.UsuarioExiste("codigo-nao-existente"), Times.Once);
     }
 }

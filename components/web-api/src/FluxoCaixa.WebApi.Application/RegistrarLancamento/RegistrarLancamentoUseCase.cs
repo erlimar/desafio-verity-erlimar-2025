@@ -5,9 +5,28 @@
 /// </summary>
 public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancamentoForm>
 {
+    private readonly IIdentityProviderGateway _identityProviderGateway;
+
+    public RegistrarLancamentoUseCase(IIdentityProviderGateway identityProviderGateway)
+    {
+        _identityProviderGateway = identityProviderGateway
+            ?? throw new ArgumentNullException(nameof(identityProviderGateway));
+    }
+
+    /// <summary>
+    /// Executa o caso de uso
+    /// </summary>
+    /// <param name="form">Dados de entrada</param>
+    /// <returns></returns>
+    /// <exception cref="DonoLancamentoInvalidoException">Quando o dono do lançamento não existe</exception>
     public Task ExecAsync(RegistrarLancamentoForm form)
     {
         ValidateForm(form);
+
+        if (!_identityProviderGateway.UsuarioExiste(form.IdentificadorDono))
+        {
+            throw new DonoLancamentoInvalidoException(form.IdentificadorDono);
+        }
 
         throw new NotImplementedException();
     }
