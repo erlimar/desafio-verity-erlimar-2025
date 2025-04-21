@@ -21,7 +21,7 @@ Será construída uma solução para *Fluxo de Caixa* que contenha:
   de negócio do lado do servidor e manterá os dados em um banco não relacional.
 
 - O cálculo dos dados para o relatório consolidado será feito por um serviço
-  executando em segundo e de forma independente da API Web. A comunicação
+  executando em segundo plano e de forma independente. A comunicação
   entre esses componentes será feita através de um mecanismo assíncrono de
   mensagens.
 
@@ -39,7 +39,7 @@ Abaixo temos uma ideia geral dos componentes da solução e a interação entre 
 
 ## Detalhes da solução
 
-Serão construídos os seguintes casos de uso:
+Devem ser implementados os seguintes casos de uso:
 
 ![](images/casos-de-uso.png)
 
@@ -49,9 +49,8 @@ Serão construídos os seguintes casos de uso:
 
 O usuário não se autenticará diretamente na aplicação web, ao invés disso a
 mesma irá redirecionar o usuário para se autenticar no serviço de identidade
-[Keycloak][KEYCLOAK], que cuidará de toda a parte de segurança para autenticar
-corretamente o usuário, e ao final redirecioná-lo já autenticado para a
-aplicação.
+[Keycloak][KEYCLOAK], que cuidará de toda a parte de segurança para validar
+corretamente a identidade do usuário, e ao final redirecioná-lo para a aplicação.
 
 ### Registrar lançamento
 
@@ -94,10 +93,10 @@ um dia específico. Não iremos fazer o cálculo do saldo consolidado em tempo d
 consulta por questões de _performance_. Ao invés disso, o usuário deve informar
 o dia que deseja ver o saldo consolidado, e uma entrada será criada para indicar
 isso, porém o saldo permanecerá pendente até que seja calculado de fato por um
-serviço em execução em segundo plano.
+serviço em segundo plano.
 
 O serviço saberá o que calcular através de mensagens recebidas da Web API
-através de fila em um [_broker de mensagens_][MESSAGE_BROKER].
+via fila em um [_broker de mensagens_][MESSAGE_BROKER].
 
 ### Visualizar consolidação diária
 
@@ -117,25 +116,28 @@ situação para que aguarde e tente visualizar novamente mais tarde.
 
 ### Diagrama de infraestrutura na AWS
 
-Usaremos os recursos das núvens públicas para complementar os requisitos de
-segurança, escalabilidade e redudância que precisamos.
+Usaremos os recursos da núven pública da [AWS][AWS] para atender os requisitos
+de segurança, escalabilidade e redudância que precisamos. No diagrama abaixo
+temos um exemplo de como se daria aessa implantação.
 
-No diagrama abaixo temos um exemplo de como se daria a implantação na nuvem
-da [AWS][AWS]. Mas o mesmo se aplica em outras nuvens como [GCP][GCP] ou [OCI][OCI].
+Vale ressaltar que escolhemos [AWS][AWS] por conveniência, mas o mesmo se aplica
+em outras nuvens como [GCP][GCP], [Azure][AZURE] ou [OCI][OCI] com algumas
+poucas mudanças.
 
 ![](images/infraestrutura-aws.png)
 
 No diagrama podemos ver principalmente como aplicamos as restrições de segurança
 quanto ao tráfego de entrada permitido. Combinamosm um _Web Application Firewall_
 e o _CloudFront_ para garantir a proteção contra ataques e a segurança do
-tráfego criptografado com _SSL/HTTPS_.
+tráfego criptografado com _TLS/HTTPS_.
 
 Um _Load Balancer_ se comunica com o _Container Service_ em conjunto com grupos
 de _auto scalling_ para entregar as demandas requisitadas, e escalar
 horizontalmente nossos _containers_ com base na necessidade.
 
 Nossas aplicações reais estão protegidas em redes privadas, e o tráfego ao mundo
-externo é controlado através de configurações de NAT.
+externo é controlado através de configurações de NAT e rígidos grupos de
+segurança.
 
 Aqui nós substituímos nossos containers de bancos relacionais (Keycloak DB) pelo
 serviço gerenciado compatível, e o mesmo ocorre para filas do _RabbitMQ_, e
@@ -169,15 +171,24 @@ a requisitos regulatórios de uso de dados em território nacional apenas.
   através de outros componentes que não estão presentes em código de aplicativo.
   Tais como WAF para proteção contra ataques, balanceamento de carga e múltiplas
   regiões de implantação para alta disponibilidade.
-- Usamos um banco [MongoDB][MONGODB] compartilhado entre a Web API e o _worker_ Consolidado
-  por questões de prazo, mas em uma situação ideal cada um usaria sua base e
-  fariamos a sincronização também através de mensagens com serviços _side car_.
+- Usamos um banco [MongoDB][MONGODB] compartilhado entre a Web API e o _worker_
+  Consolidado por questões de prazo, mas em uma situação ideal cada serviço usaria
+  sua própria base e fariamos a sincronização através de mensagens com serviços
+  lado a lado (_side car_).
 - Por questões de prazo não otimizamos a _interface do usuário_ para experiência.
   O aguardar a geração do relatório pode exigir atualização explícita de tela, o
-  que não é recomendado em um caso real. Nessas situações usaríamos o protocolo
-  [_Web Socket_][WEBSOCKET] para atualizar a _interface do usuário_ em tempo
-  real, de acordo com o relatório seja gerado.
-
+  que não é bom para o usuário em um caso real. Nessas situações usaríamos o
+  protocolo [_Web Socket_][WEBSOCKET] para atualizar a _interface do usuário_
+  em tempo real, de acordo com que o relatório esteja sendo gerado, a aqui
+  uma exibição de progresso cairia muito bem.
+- No exemplo da infraestrutura da solução na [AWS][AWS] não distinguimos recursos
+  específicos para aplicação de _frontend_, mas seria uma das melhorias a se
+  fazer, ou seja, servir os _frontends_ em serviços com suporte [_CDN_][CDN]
+  como _CloudFront_ ao invés de _containers_ regulares.
+- No exemplo da infraestrutura da solução na [AWS][AWS] também optamos pelo
+  serviço de gerenciamento de containers _ECS_ ao invés da plataforma de
+  orquestração [Kubernetes][KUBERNETES] pela simplicidade da aplicação, mas de
+  acordo com que a aplicação cresca talvez seja necessário migrar.
 
 <!-- links -->
 [OPENID_CONNECT]: https://openid.net/developers/how-connect-works
@@ -194,5 +205,10 @@ a requisitos regulatórios de uso de dados em território nacional apenas.
 [OCI]:
   <https://www.oracle.com/br/cloud/compute>
   "Oracle Cloud Infrastructure"
+[AZURE]:
+  <https://azure.microsoft.com/pt-br/>
+  "Serviços de nuvem do Microsoft Azure"  
 [WAF]: https://pt.wikipedia.org/wiki/Web_Application_Firewall
 [MONGODB_ATLAS]: https://www.mongodb.com/atlas
+[CDN]: https://en.wikipedia.org/wiki/Content_delivery_network
+[KUBERNETES]: https://kubernetes.io/pt-br/
