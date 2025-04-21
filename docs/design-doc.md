@@ -156,46 +156,13 @@ execução simultaneamente em pelo menos essas duas zonas.
 Também exemplificamos o uso na região de _São Paulo_ caso tenhamos que atender
 a requisitos regulatórios de uso de dados em território nacional apenas.
 
-## Anotações gerais
-
-- Não implementamos um mecanismo de registro de usuários devido ao tempo
-  disponível para implementação da solução, portanto está fora do escopo.
-  Mas em uma situação real ou a aplicação permitiria o *auto-registro* de
-  usuários, ou um outro serviço faria essa gestão (*back office* por exemplo).
-  Por hora faremos o registro de usuários diretamente no console do
-  [Keycloak][KEYCLOAK].
-- A implementação atual não entrega artefatos nem guias para implantação em
-  ambiente de produção devido ao tempo disponível para concepção da solução.
-  Mas uma ideia de como seria a infraestrutura de produção é apresentada para
-  que se tenha a visão de que alguns requisitos da aplicação são atendidos
-  através de outros componentes que não estão presentes em código de aplicativo.
-  Tais como WAF para proteção contra ataques, balanceamento de carga e múltiplas
-  regiões de implantação para alta disponibilidade.
-- Usamos um banco [MongoDB][MONGODB] compartilhado entre a Web API e o _worker_
-  Consolidado por questões de prazo, mas em uma situação ideal cada serviço usaria
-  sua própria base e fariamos a sincronização através de mensagens com serviços
-  lado a lado (_side car_).
-- Por questões de prazo não otimizamos a _interface do usuário_ para experiência.
-  O aguardar a geração do relatório pode exigir atualização explícita de tela, o
-  que não é bom para o usuário em um caso real. Nessas situações usaríamos o
-  protocolo [_Web Socket_][WEBSOCKET] para atualizar a _interface do usuário_
-  em tempo real, de acordo com que o relatório esteja sendo gerado, a aqui
-  uma exibição de progresso cairia muito bem.
-- No exemplo da infraestrutura da solução na [AWS][AWS] não distinguimos recursos
-  específicos para aplicação de _frontend_, mas seria uma das melhorias a se
-  fazer, ou seja, servir os _frontends_ em serviços com suporte [_CDN_][CDN]
-  como _CloudFront_ ao invés de _containers_ regulares.
-- No exemplo da infraestrutura da solução na [AWS][AWS] também optamos pelo
-  serviço de gerenciamento de containers _ECS_ ao invés da plataforma de
-  orquestração [Kubernetes][KUBERNETES] pela simplicidade da aplicação, mas de
-  acordo com que a aplicação cresca talvez seja necessário migrar.
-
 <!-- links -->
 [OPENID_CONNECT]: https://openid.net/developers/how-connect-works
 [KEYCLOAK]: https://www.keycloak.org
 [MONGODB]: https://www.mongodb.com
-[WEBSOCKET]: https://developer.mozilla.org/pt-BR/docs/Web/API/WebSockets_API
 [MESSAGE_BROKER]: https://en.wikipedia.org/wiki/Message_broker
+[WAF]: https://pt.wikipedia.org/wiki/Web_Application_Firewall
+[MONGODB_ATLAS]: https://www.mongodb.com/atlas
 [AWS]:
   <https://aws.amazon.com/pt>
   "Amazon Web Services"
@@ -208,7 +175,3 @@ a requisitos regulatórios de uso de dados em território nacional apenas.
 [AZURE]:
   <https://azure.microsoft.com/pt-br/>
   "Serviços de nuvem do Microsoft Azure"  
-[WAF]: https://pt.wikipedia.org/wiki/Web_Application_Firewall
-[MONGODB_ATLAS]: https://www.mongodb.com/atlas
-[CDN]: https://en.wikipedia.org/wiki/Content_delivery_network
-[KUBERNETES]: https://kubernetes.io/pt-br/
