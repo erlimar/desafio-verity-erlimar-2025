@@ -1,4 +1,5 @@
-﻿using FluxoCaixa.WebApi.Application.RegistrarLancamento;
+﻿using FluxoCaixa.WebApi.Application;
+using FluxoCaixa.WebApi.Application.RegistrarLancamento;
 
 using Moq;
 
@@ -10,17 +11,29 @@ public class RegistrarLancamentoUseCaseTest
     [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IIdentityProviderGateway]")]
     public void CasoDeUsoRequerUmGatewayDoIdentityProviderAsync()
     {
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new RegistrarLancamentoUseCase(null!));
+            () => new RegistrarLancamentoUseCase(null!, lancamentoAppRepository));
 
         Assert.Equal("identityProviderGateway", exception.ParamName);
+    }
+
+    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [ILancamentoAppRepository]")]
+    public void CasoDeUsoRequerUmRepositorioDeLancamentoAsync()
+    {
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => new RegistrarLancamentoUseCase(identityProviderGateway, null!));
+
+        Assert.Equal("lancamentoAppRepository", exception.ParamName);
     }
 
     [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer dados de entrada")]
     public async Task CasoDeUsoRequerDadosDeEntradaAsync()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => useCase.ExecAsync(null!));
 
         Assert.Equal("form", exception.ParamName);
@@ -33,7 +46,8 @@ public class RegistrarLancamentoUseCaseTest
     public async Task CasoDeUsoRequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new(identificadorInvalido!,
                 TipoLancamento.Credito,
@@ -52,7 +66,8 @@ public class RegistrarLancamentoUseCaseTest
     public async Task CasoDeUsoRequerDescricaoValidaAsync(string? descricaoInvalida)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -72,7 +87,8 @@ public class RegistrarLancamentoUseCaseTest
     public async Task CasoDeUsoRequerValorMaiorQueZeroAsync(decimal valorInvalido)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway);
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -88,7 +104,13 @@ public class RegistrarLancamentoUseCaseTest
     public async Task ODonoDeveExistir()
     {
         var identityProviderMock = new Mock<IIdentityProviderGateway>();
-        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object);
+
+        identityProviderMock.Setup(s => s.UsuarioExisteAsync("codigo-nao-existente"))
+            .ReturnsAsync(false);
+
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+
+        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object, lancamentoAppRepository);
         var exception = await Assert.ThrowsAsync<DonoLancamentoInvalidoException>(
             () => useCase.ExecAsync(new("codigo-nao-existente",
                 TipoLancamento.Credito,
@@ -98,6 +120,30 @@ public class RegistrarLancamentoUseCaseTest
 
         Assert.Equal("O dono de lançamento \"codigo-nao-existente\" informado não é válido", exception.Message);
 
-        identityProviderMock.Verify(m => m.UsuarioExiste("codigo-nao-existente"), Times.Once);
+        identityProviderMock.Verify(m => m.UsuarioExisteAsync("codigo-nao-existente"), Times.Once);
+    }
+
+    [Fact(DisplayName = "Não deve permitir lançamento repetido")]
+    public async Task NaoDevePermitirLancamentoRepetido()
+    {
+        var identityProviderMock = new Mock<IIdentityProviderGateway>();
+
+        identityProviderMock.Setup(s => s.UsuarioExisteAsync("codigo-dono"))
+            .ReturnsAsync(true);
+
+        var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
+
+        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltro(It.IsAny<LancamentoFilter>()))
+            .ReturnsAsync(1);
+
+        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object, lancamentoAppRepositoryMock.Object);
+        var exception = await Assert.ThrowsAsync<LancamentoRepetidoException>(
+            () => useCase.ExecAsync(new(
+                "codigo-dono", TipoLancamento.Credito, DateTimeOffset.UtcNow, 1, "Descrição repetida")));
+
+        Assert.Equal("Este lançamento já parece ter sido feito antes", exception.Message);
+
+        identityProviderMock.Verify(m => m.UsuarioExisteAsync("codigo-dono"), Times.Once);
+        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltro(It.IsAny<LancamentoFilter>()), Times.Once);
     }
 }

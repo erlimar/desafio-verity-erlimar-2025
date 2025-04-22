@@ -5,5 +5,5 @@ namespace FluxoCaixa.WebApi.Application.RegistrarLancamento;
 /// </summary>
 public interface IIdentityProviderGateway
 {
-    bool UsuarioExiste(string id);
+    Task<bool> UsuarioExisteAsync(string id);
 }

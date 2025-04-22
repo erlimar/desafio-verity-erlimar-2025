@@ -6,11 +6,15 @@
 public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancamentoForm>
 {
     private readonly IIdentityProviderGateway _identityProviderGateway;
+    private readonly ILancamentoAppRepository _lancamentoAppRepository;
 
-    public RegistrarLancamentoUseCase(IIdentityProviderGateway identityProviderGateway)
+    public RegistrarLancamentoUseCase(IIdentityProviderGateway identityProviderGateway, ILancamentoAppRepository lancamentoAppRepository)
     {
         _identityProviderGateway = identityProviderGateway
             ?? throw new ArgumentNullException(nameof(identityProviderGateway));
+
+        _lancamentoAppRepository = lancamentoAppRepository
+            ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
     }
 
     /// <summary>
@@ -19,13 +23,29 @@ public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancame
     /// <param name="form">Dados de entrada</param>
     /// <returns></returns>
     /// <exception cref="DonoLancamentoInvalidoException">Quando o dono do lançamento não existe</exception>
-    public Task ExecAsync(RegistrarLancamentoForm form)
+    public async Task ExecAsync(RegistrarLancamentoForm form)
     {
         ValidateForm(form);
 
-        if (!_identityProviderGateway.UsuarioExiste(form.IdentificadorDono))
+        // Regra: O registro deve estar sempre vinculado ao usuário dono
+        // TODO: Refatorar para mais explicitação em uma especificação de regra
+        if (!await _identityProviderGateway.UsuarioExisteAsync(form.IdentificadorDono))
         {
             throw new DonoLancamentoInvalidoException(form.IdentificadorDono);
+        }
+
+        // Regra: Não deve ser permitido o registro de mais de um lançamento com mesmo tipo, descrição, data e hora
+        var filtroLancamentosRepetidos = new LancamentoFilter
+        {
+            IdentificadorDono = form.IdentificadorDono,
+            DataHora = form.DataHora,
+            Tipo = form.Tipo,
+            Descricao = form.Descricao
+        };
+
+        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltro(filtroLancamentosRepetidos) > 0)
+        {
+            throw new LancamentoRepetidoException();
         }
 
         throw new NotImplementedException();
