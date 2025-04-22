@@ -1,7 +1,7 @@
 namespace FluxoCaixa.WebApi.Application;
 
 /// <summary>
-/// Repositório da aplicação para lançamentos
+/// Repositório de aplicação para lançamentos
 /// </summary>
 public interface ILancamentoAppRepository
 {

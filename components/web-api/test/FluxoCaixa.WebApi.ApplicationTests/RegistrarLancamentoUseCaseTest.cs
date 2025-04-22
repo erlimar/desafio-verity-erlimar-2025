@@ -12,8 +12,13 @@ public class RegistrarLancamentoUseCaseTest
     public void CasoDeUsoRequerUmGatewayDoIdentityProviderAsync()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new RegistrarLancamentoUseCase(null!, lancamentoAppRepository));
+            () => new RegistrarLancamentoUseCase(null!,
+                lancamentoAppRepository,
+                consolidadoAppRepository,
+                appMessageBroker));
 
         Assert.Equal("identityProviderGateway", exception.ParamName);
     }
@@ -22,10 +27,48 @@ public class RegistrarLancamentoUseCaseTest
     public void CasoDeUsoRequerUmRepositorioDeLancamentoAsync()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new RegistrarLancamentoUseCase(identityProviderGateway, null!));
+            () => new RegistrarLancamentoUseCase(
+                identityProviderGateway,
+                null!,
+                consolidadoAppRepository,
+                appMessageBroker));
 
         Assert.Equal("lancamentoAppRepository", exception.ParamName);
+    }
+
+    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IAppMessageBroker]")]
+    public void CasoDeUsoRequerUmCorretorDeMensagensAsync()
+    {
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => new RegistrarLancamentoUseCase(
+                identityProviderGateway,
+                lancamentoAppRepository,
+                consolidadoAppRepository,
+                null!));
+
+        Assert.Equal("appMessageBroker", exception.ParamName);
+    }
+
+    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IConsolidadoAppRepository]")]
+    public void CasoDeUsoRequerUmRepositorioDeConsolidadoAsync()
+    {
+        var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
+        var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => new RegistrarLancamentoUseCase(
+                identityProviderGateway,
+                lancamentoAppRepository,
+                null!,
+                appMessageBroker));
+
+        Assert.Equal("consolidadoAppRepository", exception.ParamName);
     }
 
     [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer dados de entrada")]
@@ -33,8 +76,15 @@ public class RegistrarLancamentoUseCaseTest
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
-        var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => useCase.ExecAsync(null!));
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderGateway,
+            lancamentoAppRepository,
+            consolidadoAppRepository,
+            appMessageBroker);
+        var exception = await Assert.ThrowsAsync<ArgumentNullException>(
+            () => useCase.ExecAsync(null!));
 
         Assert.Equal("form", exception.ParamName);
     }
@@ -47,7 +97,13 @@ public class RegistrarLancamentoUseCaseTest
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderGateway,
+            lancamentoAppRepository,
+            consolidadoAppRepository,
+            appMessageBroker);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new(identificadorInvalido!,
                 TipoLancamento.Credito,
@@ -67,7 +123,13 @@ public class RegistrarLancamentoUseCaseTest
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderGateway,
+            lancamentoAppRepository,
+            consolidadoAppRepository,
+            appMessageBroker);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -88,7 +150,13 @@ public class RegistrarLancamentoUseCaseTest
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
-        var useCase = new RegistrarLancamentoUseCase(identityProviderGateway, lancamentoAppRepository);
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderGateway,
+            lancamentoAppRepository,
+            consolidadoAppRepository,
+            appMessageBroker);
         var exception = await Assert.ThrowsAsync<ArgumentException>(
             () => useCase.ExecAsync(new("Dono",
                 TipoLancamento.Credito,
@@ -109,8 +177,14 @@ public class RegistrarLancamentoUseCaseTest
             .ReturnsAsync(false);
 
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
 
-        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object, lancamentoAppRepository);
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderMock.Object,
+            lancamentoAppRepository,
+            consolidadoAppRepository,
+            appMessageBroker);
         var exception = await Assert.ThrowsAsync<DonoLancamentoInvalidoException>(
             () => useCase.ExecAsync(new("codigo-nao-existente",
                 TipoLancamento.Credito,
@@ -136,7 +210,14 @@ public class RegistrarLancamentoUseCaseTest
         lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltro(It.IsAny<LancamentoFilter>()))
             .ReturnsAsync(1);
 
-        var useCase = new RegistrarLancamentoUseCase(identityProviderMock.Object, lancamentoAppRepositoryMock.Object);
+        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
+        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderMock.Object,
+            lancamentoAppRepositoryMock.Object,
+            consolidadoAppRepository,
+            appMessageBroker);
         var exception = await Assert.ThrowsAsync<LancamentoRepetidoException>(
             () => useCase.ExecAsync(new(
                 "codigo-dono", TipoLancamento.Credito, DateTimeOffset.UtcNow, 1, "Descrição repetida")));

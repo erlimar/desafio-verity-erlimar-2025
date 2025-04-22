@@ -7,14 +7,26 @@ public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancame
 {
     private readonly IIdentityProviderGateway _identityProviderGateway;
     private readonly ILancamentoAppRepository _lancamentoAppRepository;
+    private readonly IConsolidadoAppRepository _consolidadoAppRepository;
+    private readonly IAppMessageBroker _appMessageBroker;
 
-    public RegistrarLancamentoUseCase(IIdentityProviderGateway identityProviderGateway, ILancamentoAppRepository lancamentoAppRepository)
+    public RegistrarLancamentoUseCase(
+        IIdentityProviderGateway identityProviderGateway,
+        ILancamentoAppRepository lancamentoAppRepository,
+        IConsolidadoAppRepository consolidadoAppRepository,
+        IAppMessageBroker appMessageBroker)
     {
         _identityProviderGateway = identityProviderGateway
             ?? throw new ArgumentNullException(nameof(identityProviderGateway));
 
         _lancamentoAppRepository = lancamentoAppRepository
             ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
+
+        _consolidadoAppRepository = consolidadoAppRepository
+            ?? throw new ArgumentNullException(nameof(consolidadoAppRepository));
+
+        _appMessageBroker = appMessageBroker
+            ?? throw new ArgumentNullException(nameof(appMessageBroker));
     }
 
     /// <summary>
