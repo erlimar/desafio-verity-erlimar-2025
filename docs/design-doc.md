@@ -81,8 +81,10 @@ informação, considerando:
 ![](images/caso-de-uso-visualizar-lancamentos.png)
 
 O usuário autenticado poderá visualizar os lançamentos que já fez. Esses serão
-servidos pela API de forma paginada para evitar sobrecarga aos serviços, além
-de serem ordenados por data/hora.
+servidos pela API, obrigatoriamente entre um período determinado de até 90
+dias. O resultado deve ser dinamicamente paginado com até 5 registros por
+página de resultado, além de serem ordenados por data/hora. Essas regras visam
+evitar sobrecarga do serviço durante as pesquisar.
 
 ### Calcular consolidação diária
 

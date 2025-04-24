@@ -4,7 +4,7 @@
 /// Executa o caso de uso "Registrar Lançamento"
 /// </summary>
 public class RegistrarLancamentoUseCase
-    : IUseCaseWithInputForm<RegistrarLancamentoForm>
+    : IUseCaseWithoutOutput<RegistrarLancamentoForm>
 {
     private readonly IIdentityProviderGateway _identityProviderGateway;
     private readonly ILancamentoAppRepository _lancamentoAppRepository;

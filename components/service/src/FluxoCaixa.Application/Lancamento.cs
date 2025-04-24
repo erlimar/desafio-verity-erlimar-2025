@@ -5,6 +5,7 @@ namespace FluxoCaixa.Application;
 /// </summary>
 public record class Lancamento
 {
+    public string? Id { get; init; }
     public required string IdentificadorDono { get; init; }
     public required TipoLancamento Tipo { get; init; }
     public required DateTimeOffset DataHora { get; init; }
