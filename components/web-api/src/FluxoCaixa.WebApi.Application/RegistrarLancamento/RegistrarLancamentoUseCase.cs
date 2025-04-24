@@ -3,7 +3,8 @@
 /// <summary>
 /// Executa o caso de uso "Registrar Lançamento"
 /// </summary>
-public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancamentoForm>
+public class RegistrarLancamentoUseCase
+    : IUseCaseWithInputForm<RegistrarLancamentoForm>
 {
     private readonly IIdentityProviderGateway _identityProviderGateway;
     private readonly ILancamentoAppRepository _lancamentoAppRepository;
@@ -34,7 +35,9 @@ public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancame
     /// </summary>
     /// <param name="form">Dados de entrada</param>
     /// <returns></returns>
-    /// <exception cref="DonoLancamentoInvalidoException">Quando o dono do lançamento não existe</exception>
+    /// <exception cref="DonoLancamentoInvalidoException">
+    /// Quando o dono do lançamento não existe
+    /// </exception>
     public async Task ExecAsync(RegistrarLancamentoForm form)
     {
         ValidateForm(form);
@@ -46,7 +49,8 @@ public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancame
             throw new DonoLancamentoInvalidoException(form.IdentificadorDono);
         }
 
-        // Regra: Não deve ser permitido o registro de mais de um lançamento com mesmo tipo, descrição, data e hora
+        // Regra: Não deve ser permitido o registro de mais de um lançamento
+        //        com mesmo tipo, descrição, data e hora
         var filtroLancamentosRepetidos = new LancamentoFilter
         {
             IdentificadorDono = form.IdentificadorDono,
@@ -55,12 +59,37 @@ public class RegistrarLancamentoUseCase : IUseCaseWithInputForm<RegistrarLancame
             Descricao = form.Descricao
         };
 
-        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltro(filtroLancamentosRepetidos) > 0)
+        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltroAsync(filtroLancamentosRepetidos) > 0)
         {
             throw new LancamentoRepetidoException();
         }
 
-        throw new NotImplementedException();
+        // Regra: Caso haja uma cosolidação já registrada para o dia do lançamento,
+        //        essa deve ser invalidada, e uma mensagem para o serviço
+        //        Consolidado deve ser emitida para que o cálculo seja refeito
+        if (await _consolidadoAppRepository.ExisteConsolidadoDoDiaAsync(form.DataHora))
+        {
+            await _consolidadoAppRepository.GravarConsolidadoAsync(new Consolidado()
+            {
+                IdentificadorDono = form.IdentificadorDono,
+                DataHora = form.DataHora,
+                Status = StatusConsolidado.Invalidado
+            });
+
+            await _appMessageBroker.Send(new ConsolidarMessage()
+            {
+                Data = form.DataHora
+            });
+        }
+
+        await _lancamentoAppRepository.GravarLancamentoAsync(new Lancamento()
+        {
+            IdentificadorDono = form.IdentificadorDono,
+            Tipo = form.Tipo,
+            DataHora = form.DataHora,
+            Valor = form.Valor,
+            Descricao = form.Descricao
+        });
     }
 
     private static void ValidateForm(RegistrarLancamentoForm form)

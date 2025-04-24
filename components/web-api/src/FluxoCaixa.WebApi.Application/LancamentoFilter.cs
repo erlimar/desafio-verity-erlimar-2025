@@ -1,5 +1,3 @@
-using FluxoCaixa.WebApi.Application.RegistrarLancamento;
-
 namespace FluxoCaixa.WebApi.Application;
 
 /// <summary>

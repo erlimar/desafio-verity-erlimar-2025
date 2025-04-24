@@ -207,17 +207,17 @@ public class RegistrarLancamentoUseCaseTest
 
         var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
 
-        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltro(It.IsAny<LancamentoFilter>()))
+        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltroAsync(It.IsAny<LancamentoFilter>()))
             .ReturnsAsync(1);
 
-        var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
-        var appMessageBroker = new Mock<IAppMessageBroker>().Object;
+        var consolidadoAppRepositoryMock = new Mock<IConsolidadoAppRepository>();
+        var appMessageBrokerMock = new Mock<IAppMessageBroker>();
 
         var useCase = new RegistrarLancamentoUseCase(
             identityProviderMock.Object,
             lancamentoAppRepositoryMock.Object,
-            consolidadoAppRepository,
-            appMessageBroker);
+            consolidadoAppRepositoryMock.Object,
+            appMessageBrokerMock.Object);
         var exception = await Assert.ThrowsAsync<LancamentoRepetidoException>(
             () => useCase.ExecAsync(new(
                 "codigo-dono", TipoLancamento.Credito, DateTimeOffset.UtcNow, 1, "Descrição repetida")));
@@ -225,6 +225,45 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("Este lançamento já parece ter sido feito antes", exception.Message);
 
         identityProviderMock.Verify(m => m.UsuarioExisteAsync("codigo-dono"), Times.Once);
-        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltro(It.IsAny<LancamentoFilter>()), Times.Once);
+        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltroAsync(It.IsAny<LancamentoFilter>()), Times.Once);
+        consolidadoAppRepositoryMock.Verify(m => m.ExisteConsolidadoDoDiaAsync(It.IsAny<DateTimeOffset>()), Times.Never);
+        appMessageBrokerMock.Verify(m => m.Send(It.IsAny<ConsolidarMessage>()), Times.Never);
+    }
+
+    [Fact(DisplayName = "Deve invalidar um consolidado para o dia caso exista")]
+    public async Task DeveInvalidarConsolidadoCasoExista()
+    {
+        var identityProviderMock = new Mock<IIdentityProviderGateway>();
+
+        identityProviderMock.Setup(s => s.UsuarioExisteAsync("codigo-dono"))
+            .ReturnsAsync(true);
+
+        var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
+
+        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltroAsync(It.IsAny<LancamentoFilter>()))
+            .ReturnsAsync(0);
+
+        var consolidadoAppRepositoryMock = new Mock<IConsolidadoAppRepository>();
+
+        consolidadoAppRepositoryMock.Setup(s => s.ExisteConsolidadoDoDiaAsync(It.IsAny<DateTimeOffset>()))
+            .ReturnsAsync(true);
+
+        var appMessageBrokerMock = new Mock<IAppMessageBroker>();
+
+        var useCase = new RegistrarLancamentoUseCase(
+            identityProviderMock.Object,
+            lancamentoAppRepositoryMock.Object,
+            consolidadoAppRepositoryMock.Object,
+            appMessageBrokerMock.Object);
+
+        await useCase.ExecAsync(new(
+                "codigo-dono", TipoLancamento.Credito, DateTimeOffset.UtcNow, 1, "Descrição repetida"));
+
+        identityProviderMock.Verify(m => m.UsuarioExisteAsync("codigo-dono"), Times.Once);
+        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltroAsync(It.IsAny<LancamentoFilter>()), Times.Once);
+        lancamentoAppRepositoryMock.Verify(m => m.GravarLancamentoAsync(It.IsAny<Lancamento>()), Times.Once);
+        consolidadoAppRepositoryMock.Verify(m => m.ExisteConsolidadoDoDiaAsync(It.IsAny<DateTimeOffset>()), Times.Once);
+        consolidadoAppRepositoryMock.Verify(m => m.GravarConsolidadoAsync(It.IsAny<Consolidado>()), Times.Once);
+        appMessageBrokerMock.Verify(m => m.Send(It.IsAny<ConsolidarMessage>()), Times.Once);
     }
 }

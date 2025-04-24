@@ -10,5 +10,11 @@ public interface ILancamentoAppRepository
     /// </summary>
     /// <param name="filtro">Dados do filtro</param>
     /// <returns>Total de lançamentos</returns>
-    Task<int> ObterTotalLancamentosPorFiltro(LancamentoFilter filtro);
+    Task<int> ObterTotalLancamentosPorFiltroAsync(LancamentoFilter filtro);
+
+    /// <summary>
+    /// Grava dados de um lançamento
+    /// </summary>
+    /// <param name="lancamento">Dados do lançamento</param>
+    Task GravarLancamentoAsync(Lancamento lancamento);
 }
