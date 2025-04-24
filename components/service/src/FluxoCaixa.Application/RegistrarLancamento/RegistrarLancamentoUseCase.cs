@@ -44,7 +44,9 @@ public class RegistrarLancamentoUseCase
 
         // Regra: O registro deve estar sempre vinculado ao usuário dono
         // TODO: Refatorar para mais explicitação em uma especificação de regra
-        if (!await _identityProviderGateway.UsuarioExisteAsync(form.IdentificadorDono, cancellationToken))
+        if (!await _identityProviderGateway.UsuarioExisteAsync(
+            form.IdentificadorDono,
+            cancellationToken))
         {
             throw new DonoLancamentoInvalidoException(form.IdentificadorDono);
         }
@@ -59,7 +61,9 @@ public class RegistrarLancamentoUseCase
             Descricao = form.Descricao
         };
 
-        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltroAsync(filtroLancamentosRepetidos, cancellationToken) > 0)
+        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltroAsync(
+            filtroLancamentosRepetidos,
+            cancellationToken) > 0)
         {
             throw new LancamentoRepetidoException();
         }
@@ -67,7 +71,10 @@ public class RegistrarLancamentoUseCase
         // Regra: Caso haja uma cosolidação já registrada para o dia do lançamento,
         //        essa deve ser invalidada, e uma mensagem para o serviço
         //        Consolidado deve ser emitida para que o cálculo seja refeito
-        if (await _consolidadoAppRepository.ExisteConsolidadoDoDiaAsync(form.DataHora, cancellationToken))
+        if (await _consolidadoAppRepository.ExisteConsolidadoDoDiaAsync(
+            form.IdentificadorDono,
+            form.DataHora,
+            cancellationToken))
         {
             await _consolidadoAppRepository.GravarConsolidadoAsync(new Consolidado()
             {
@@ -98,17 +105,23 @@ public class RegistrarLancamentoUseCase
 
         if (string.IsNullOrWhiteSpace(form.IdentificadorDono))
         {
-            throw new ArgumentException("O identificador do dono não pode ser vazio", nameof(form.IdentificadorDono));
+            throw new ArgumentException(
+                "O identificador do dono não pode ser vazio",
+                nameof(form.IdentificadorDono));
         }
 
         if (string.IsNullOrWhiteSpace(form.Descricao))
         {
-            throw new ArgumentException("A descrição não pode ser vazia", nameof(form.Descricao));
+            throw new ArgumentException(
+                "A descrição não pode ser vazia",
+                nameof(form.Descricao));
         }
 
         if (form.Valor <= 0m)
         {
-            throw new ArgumentException("O valor precisa ser maior que zero", nameof(form.Valor));
+            throw new ArgumentException(
+                "O valor precisa ser maior que zero",
+                nameof(form.Valor));
         }
     }
 }

@@ -240,6 +240,7 @@ public class RegistrarLancamentoUseCaseTest
             It.IsAny<LancamentoFilter>(),
             It.IsAny<CancellationToken>()), Times.Once);
         consolidadoAppRepositoryMock.Verify(m => m.ExisteConsolidadoDoDiaAsync(
+            "codigo-dono",
             It.IsAny<DateTimeOffset>(),
             It.IsAny<CancellationToken>()), Times.Never);
         appMessageBrokerMock.Verify(m => m.SendAsync(
@@ -267,6 +268,7 @@ public class RegistrarLancamentoUseCaseTest
         var consolidadoAppRepositoryMock = new Mock<IConsolidadoAppRepository>();
 
         consolidadoAppRepositoryMock.Setup(s => s.ExisteConsolidadoDoDiaAsync(
+            "codigo-dono",
             It.IsAny<DateTimeOffset>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
@@ -296,6 +298,7 @@ public class RegistrarLancamentoUseCaseTest
             It.IsAny<Lancamento>(),
             It.IsAny<CancellationToken>()), Times.Once);
         consolidadoAppRepositoryMock.Verify(m => m.ExisteConsolidadoDoDiaAsync(
+            "codigo-dono",
             It.IsAny<DateTimeOffset>(),
             It.IsAny<CancellationToken>()), Times.Once);
         consolidadoAppRepositoryMock.Verify(m => m.GravarConsolidadoAsync(
