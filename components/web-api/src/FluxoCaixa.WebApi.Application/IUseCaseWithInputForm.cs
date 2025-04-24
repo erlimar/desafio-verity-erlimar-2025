@@ -10,5 +10,5 @@ public interface IUseCaseWithInputForm<TForm>
     /// Executa o caso de uso
     /// </summary>
     /// <param name="form">Dados de entrada</param>
-    Task ExecAsync(TForm form);
+    Task ExecAsync(TForm form, CancellationToken cancellationToken);
 }

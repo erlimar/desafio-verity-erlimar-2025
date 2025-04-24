@@ -10,11 +10,11 @@ public interface IConsolidadoAppRepository
     /// </summary>
     /// <param name="dataHora">Data/hora para verificar</param>
     /// <returns><see cref="true"/>Se já existe</returns>
-    Task<bool> ExisteConsolidadoDoDiaAsync(DateTimeOffset dataHora);
+    Task<bool> ExisteConsolidadoDoDiaAsync(DateTimeOffset dataHora, CancellationToken cancellationToken);
 
     /// <summary>
     /// Grava dados de um consolidado. Substituindo caso já exista
     /// </summary>
     /// <param name="dados">Dados para gravação</param>
-    Task GravarConsolidadoAsync(Consolidado dados);
+    Task GravarConsolidadoAsync(Consolidado dados, CancellationToken cancellationToken);
 }
