@@ -6,12 +6,15 @@ namespace FluxoCaixa.Application;
 public interface IConsolidadoAppRepository
 {
     /// <summary>
-    /// Verifica se já existe um consolidado no dia informado
+    /// Obtem uma lista de consolidados registrados à partir do dia informado
     /// </summary>
     /// <param name="identificadorDono">Identificador do dono</param>
     /// <param name="dataHora">Data/hora para verificar</param>
-    /// <returns><see cref="true"/>Se já existe</returns>
-    Task<bool> ExisteConsolidadoDoDiaAsync(string identificadorDono, DateTimeOffset dataHora, CancellationToken cancellationToken);
+    /// <returns>Lista de consolidados registrados, ou lista vazia caso não existam</returns>
+    Task<IEnumerable<Consolidado>> ObterConsolidadosAPartirDoDiaAsync(
+        string identificadorDono,
+        DateTimeOffset dataHora,
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// Grava dados de um consolidado. Substituindo caso já exista

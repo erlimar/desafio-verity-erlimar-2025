@@ -2,5 +2,5 @@ namespace FluxoCaixa.Application.RegistrarLancamento;
 
 public record ConsolidarMessage
 {
-    public required DateTimeOffset Data { get; init; }
+    public required string Id { get; init; }
 }

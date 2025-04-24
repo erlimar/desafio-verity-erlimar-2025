@@ -72,9 +72,9 @@ informação, considerando:
 - Não deve ser permitido o registro de mais de um lançamento com mesmo tipo,
   descrição, data e hora
 
-- Caso haja uma cosolidação já registrada para o dia do lançamento, essa
-  deve ser invalidada, e uma mensagem para o serviço **Consolidado** deve ser
-  emitida para que o cálculo seja refeito.
+- Caso hajam cosolidações já registradas à partir do dia do lançamento, essas
+  devem ser invalidadas, e mensagens correspondentes para o serviço
+  **Consolidado** devem ser emitidas para que o cálculo seja refeito.
 
 ### Visualizar lançamentos
 

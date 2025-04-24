@@ -68,25 +68,32 @@ public class RegistrarLancamentoUseCase
             throw new LancamentoRepetidoException();
         }
 
-        // Regra: Caso haja uma cosolidação já registrada para o dia do lançamento,
-        //        essa deve ser invalidada, e uma mensagem para o serviço
-        //        Consolidado deve ser emitida para que o cálculo seja refeito
-        if (await _consolidadoAppRepository.ExisteConsolidadoDoDiaAsync(
+        // Regra: Caso hajam cosolidações já registradas à partir do dia do
+        //        lançamento, essas devem ser invalidadas, e mensagens
+        //        correspondentes para o serviço "Consolidado" devem ser emitidas
+        //        para que o cálculo seja refeito.
+        var consolidacoes = await _consolidadoAppRepository.ObterConsolidadosAPartirDoDiaAsync(
             form.IdentificadorDono,
             form.DataHora,
-            cancellationToken))
-        {
-            await _consolidadoAppRepository.GravarConsolidadoAsync(new Consolidado()
-            {
-                IdentificadorDono = form.IdentificadorDono,
-                DataHora = form.DataHora,
-                Status = StatusConsolidado.Invalidado
-            }, cancellationToken);
+            cancellationToken) ?? [];
 
-            await _appMessageBroker.SendAsync(new ConsolidarMessage()
+        if (consolidacoes.Any())
+        {
+            foreach (var consolidacao in consolidacoes)
             {
-                Data = form.DataHora
-            }, cancellationToken);
+                await _consolidadoAppRepository.GravarConsolidadoAsync(new Consolidado()
+                {
+                    Id = consolidacao.Id,
+                    IdentificadorDono = consolidacao.IdentificadorDono,
+                    DataHora = consolidacao.DataHora,
+                    Status = StatusConsolidado.Invalidado
+                }, cancellationToken);
+
+                await _appMessageBroker.SendAsync(new ConsolidarMessage()
+                {
+                    Id = consolidacao.Id!
+                }, cancellationToken);
+            }
         }
 
         await _lancamentoAppRepository.GravarLancamentoAsync(new Lancamento()
