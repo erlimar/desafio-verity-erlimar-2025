@@ -1,12 +1,12 @@
-name: .NET Web API CI
+name: .NET Service CI
 
 on:
   push:
     branches: [ "main" ]
-    paths: [ "components/web-api/**", ".github/workflow/web-api*" ]
+    paths: [ "components/service/**", ".github/workflow/service.yml" ]
   pull_request:
     branches: [ "main" ]
-    paths: [ "components/web-api/**", ".github/workflow/web-api*" ]
+    paths: [ "components/service/**", ".github/workflow/service.yml" ]
 
 jobs:
   build:
@@ -22,12 +22,12 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ./components/web-api/
+      working-directory: ./components/service/
 
     - name: Build
       run: dotnet build --no-restore
-      working-directory: ./components/web-api/
+      working-directory: ./components/service/
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: ./components/web-api/
+      working-directory: ./components/service/

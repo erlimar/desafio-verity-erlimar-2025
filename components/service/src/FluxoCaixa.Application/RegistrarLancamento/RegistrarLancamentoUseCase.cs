@@ -1,4 +1,4 @@
-﻿namespace FluxoCaixa.WebApi.Application.RegistrarLancamento;
+﻿namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
 /// Executa o caso de uso "Registrar Lançamento"

@@ -1,9 +1,9 @@
-﻿using FluxoCaixa.WebApi.Application;
-using FluxoCaixa.WebApi.Application.RegistrarLancamento;
+﻿using FluxoCaixa.Application;
+using FluxoCaixa.Application.RegistrarLancamento;
 
 using Moq;
 
-namespace FluxoCaixa.WebApi.ApplicationTests;
+namespace FluxoCaixa.ApplicationTests;
 
 [Trait("Target", nameof(RegistrarLancamentoUseCase))]
 public class RegistrarLancamentoUseCaseTest

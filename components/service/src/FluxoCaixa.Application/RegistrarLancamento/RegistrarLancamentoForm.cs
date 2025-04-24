@@ -1,4 +1,4 @@
-namespace FluxoCaixa.WebApi.Application.RegistrarLancamento;
+namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
 /// Dados de entrada do caso se uso <see cref="RegistrarLancamentoUseCase"/>

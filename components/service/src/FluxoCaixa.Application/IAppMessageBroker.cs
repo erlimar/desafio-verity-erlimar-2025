@@ -1,6 +1,6 @@
-using FluxoCaixa.WebApi.Application.RegistrarLancamento;
+using FluxoCaixa.Application.RegistrarLancamento;
 
-namespace FluxoCaixa.WebApi.Application;
+namespace FluxoCaixa.Application;
 
 /// <summary>
 /// Corretor para mensagens da aplicação

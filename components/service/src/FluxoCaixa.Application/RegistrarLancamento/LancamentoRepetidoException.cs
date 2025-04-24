@@ -1,4 +1,4 @@
-namespace FluxoCaixa.WebApi.Application.RegistrarLancamento;
+namespace FluxoCaixa.Application.RegistrarLancamento;
 
 public class LancamentoRepetidoException : Exception
 {

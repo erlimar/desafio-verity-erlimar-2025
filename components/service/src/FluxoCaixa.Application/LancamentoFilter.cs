@@ -1,4 +1,4 @@
-namespace FluxoCaixa.WebApi.Application;
+namespace FluxoCaixa.Application;
 
 /// <summary>
 /// Filtro para pesquisa de lançamentos

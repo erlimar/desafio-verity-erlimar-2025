@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FluxoCaixa.WebApi.Application\FluxoCaixa.WebApi.Application.csproj" />
+    <ProjectReference Include="..\..\src\FluxoCaixa.Application\FluxoCaixa.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace FluxoCaixa.WebApi.Application.RegistrarLancamento;
+namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
 /// Quando o dono de um lançamento é inválido

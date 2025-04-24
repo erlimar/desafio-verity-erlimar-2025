@@ -1,4 +1,4 @@
-namespace FluxoCaixa.WebApi.Application;
+namespace FluxoCaixa.Application;
 
 /// <summary>
 /// Um caso de uso que requer entrada de dados
