@@ -8,7 +8,8 @@ namespace FluxoCaixa.Application.RegistrarLancamento;
 /// <param name="DataHora">Data/Hora do lançamento</param>
 /// <param name="Valor">Valor do lançamento</param>
 /// <param name="Descricao">Descrição do lançamento</param>
-public record RegistrarLancamentoForm(string IdentificadorDono,
+public record RegistrarLancamentoForm(
+    string IdentificadorDono,
     TipoLancamento Tipo,
     DateTimeOffset DataHora,
     decimal Valor,

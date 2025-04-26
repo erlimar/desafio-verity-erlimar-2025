@@ -17,6 +17,17 @@ public interface IConsolidadoAppRepository
         CancellationToken cancellationToken);
 
     /// <summary>
+    /// Obtem uma lista de consolidados registrados na data informada
+    /// </summary>
+    /// <param name="identificadorDono">Identificador do dono</param>
+    /// <param name="dataHora">Data/hora para verificar</param>
+    /// <returns>Lista de consolidados registrados, ou lista vazia caso não existam</returns>
+    Task<IEnumerable<Consolidado>> ObterConsolidadosDaDataAsync(
+        string identificadorDono,
+        DateTimeOffset dataHora,
+        CancellationToken cancellationToken);
+
+    /// <summary>
     /// Grava dados de um consolidado. Substituindo caso já exista
     /// </summary>
     /// <param name="dados">Dados para gravação</param>
