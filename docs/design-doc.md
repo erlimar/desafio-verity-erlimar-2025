@@ -72,17 +72,19 @@ informação, considerando:
 - Não deve ser permitido o registro de mais de um lançamento com mesmo tipo,
   descrição, data e hora
 
-- Caso haja uma cosolidação já registrada para o dia do lançamento, essa
-  deve ser invalidada, e uma mensagem para o serviço **Consolidado** deve ser
-  emitida para que o cálculo seja refeito.
+- Caso hajam cosolidações já registradas à partir do dia do lançamento, essas
+  devem ser invalidadas, e mensagens correspondentes para o serviço
+  **Consolidado** devem ser emitidas para que o cálculo seja refeito.
 
 ### Visualizar lançamentos
 
 ![](images/caso-de-uso-visualizar-lancamentos.png)
 
 O usuário autenticado poderá visualizar os lançamentos que já fez. Esses serão
-servidos pela API de forma paginada para evitar sobrecarga aos serviços, além
-de serem ordenados por data/hora.
+servidos pela API, obrigatoriamente entre um período determinado de até 90
+dias. O resultado deve ser dinamicamente paginado com até 5 registros por
+página de resultado, além de serem ordenados por data/hora. Essas regras visam
+evitar sobrecarga do serviço durante as pesquisar.
 
 ### Calcular consolidação diária
 
