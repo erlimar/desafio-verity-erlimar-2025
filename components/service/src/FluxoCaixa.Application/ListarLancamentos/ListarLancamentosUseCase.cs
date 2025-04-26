@@ -4,15 +4,11 @@ namespace FluxoCaixa.Application.ListarLancamentos;
 /// Executa o caso de uso "Visualizar lançamentos", que pesquisa os lançamentos
 /// em uma janela de período de forma paginada
 /// </summary>
-public class ListarLancamentosUseCase : IUseCaseInputOutput<ListarLancamentosForm, IEnumerable<Lancamento>>
+public class ListarLancamentosUseCase(ILancamentoAppRepository lancamentoAppRepository)
+    : IUseCaseInputOutput<ListarLancamentosForm, IEnumerable<Lancamento>>
 {
-    private readonly ILancamentoAppRepository _lancamentoAppRepository;
-
-    public ListarLancamentosUseCase(ILancamentoAppRepository lancamentoAppRepository)
-    {
-        _lancamentoAppRepository = lancamentoAppRepository ??
+    private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository ??
             throw new ArgumentNullException(nameof(lancamentoAppRepository));
-    }
 
     /// <summary>
     /// Executa o caso de uso

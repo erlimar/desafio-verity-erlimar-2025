@@ -3,32 +3,21 @@
 /// <summary>
 /// Executa o caso de uso "Registrar Lançamento", que cadastra um novo lançamento
 /// </summary>
-public class RegistrarLancamentoUseCase
+public class RegistrarLancamentoUseCase(
+    IIdentityProviderGateway identityProviderGateway,
+    ILancamentoAppRepository lancamentoAppRepository,
+    IConsolidadoAppRepository consolidadoAppRepository,
+    IAppMessageBroker appMessageBroker)
     : IUseCaseInputOnly<RegistrarLancamentoForm>
 {
-    private readonly IIdentityProviderGateway _identityProviderGateway;
-    private readonly ILancamentoAppRepository _lancamentoAppRepository;
-    private readonly IConsolidadoAppRepository _consolidadoAppRepository;
-    private readonly IAppMessageBroker _appMessageBroker;
-
-    public RegistrarLancamentoUseCase(
-        IIdentityProviderGateway identityProviderGateway,
-        ILancamentoAppRepository lancamentoAppRepository,
-        IConsolidadoAppRepository consolidadoAppRepository,
-        IAppMessageBroker appMessageBroker)
-    {
-        _identityProviderGateway = identityProviderGateway
+    private readonly IIdentityProviderGateway _identityProviderGateway = identityProviderGateway
             ?? throw new ArgumentNullException(nameof(identityProviderGateway));
-
-        _lancamentoAppRepository = lancamentoAppRepository
+    private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository
             ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
-
-        _consolidadoAppRepository = consolidadoAppRepository
+    private readonly IConsolidadoAppRepository _consolidadoAppRepository = consolidadoAppRepository
             ?? throw new ArgumentNullException(nameof(consolidadoAppRepository));
-
-        _appMessageBroker = appMessageBroker
+    private readonly IAppMessageBroker _appMessageBroker = appMessageBroker
             ?? throw new ArgumentNullException(nameof(appMessageBroker));
-    }
 
     /// <summary>
     /// Executa o caso de uso
@@ -96,10 +85,7 @@ public class RegistrarLancamentoUseCase
                     Status = StatusConsolidado.Invalidado
                 }, cancellationToken);
 
-                await _appMessageBroker.SendAsync(new ConsolidarMessage()
-                {
-                    Id = consolidacao.Id!
-                }, cancellationToken);
+                await _appMessageBroker.SendAsync(new ConsolidarMessage(consolidacao.Id!), cancellationToken);
             }
         }
 

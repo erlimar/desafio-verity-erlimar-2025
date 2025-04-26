@@ -4,15 +4,11 @@ namespace FluxoCaixa.Application.BuscarConsolidadoDiario;
 /// Executa o caso de uso "Visualizar consolidação diária", que obtém os dados
 /// de uma consolidação em um dia específico
 /// </summary>
-public class BuscarConsolidadoDiarioUseCase : IUseCaseInputOutput<BuscarConsolidadoDiarioForm, Consolidado?>
+public class BuscarConsolidadoDiarioUseCase(IConsolidadoAppRepository consolidadoAppRepository)
+    : IUseCaseInputOutput<BuscarConsolidadoDiarioForm, Consolidado?>
 {
-    private readonly IConsolidadoAppRepository _consolidadoAppRepository;
-
-    public BuscarConsolidadoDiarioUseCase(IConsolidadoAppRepository consolidadoAppRepository)
-    {
-        _consolidadoAppRepository = consolidadoAppRepository ??
+    private readonly IConsolidadoAppRepository _consolidadoAppRepository = consolidadoAppRepository ??
             throw new ArgumentNullException(nameof(consolidadoAppRepository));
-    }
 
     /// <summary>
     /// Executa o caso de uso

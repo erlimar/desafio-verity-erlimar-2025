@@ -1,4 +1,3 @@
-
 namespace FluxoCaixa.Application.CalcularConsolidacao;
 
 /// <summary>
@@ -6,21 +5,15 @@ namespace FluxoCaixa.Application.CalcularConsolidacao;
 /// registra esses dados para consulta de saldo consolidado em um determinado
 /// dia
 /// </summary>
-public class CalcularConsolidacaoUseCase : IUseCaseInputOutput<CalcularConsolidacaoForm, Consolidado>
+public class CalcularConsolidacaoUseCase(
+    ILancamentoAppRepository lancamentoAppRepository,
+    IConsolidadoAppRepository consolidadoAppRepository)
+    : IUseCaseInputOutput<CalcularConsolidacaoForm, Consolidado>
 {
-    private readonly ILancamentoAppRepository _lancamentoAppRepository;
-    private readonly IConsolidadoAppRepository _consolidadoAppRepository;
-
-    public CalcularConsolidacaoUseCase(
-        ILancamentoAppRepository lancamentoAppRepository,
-        IConsolidadoAppRepository consolidadoAppRepository)
-    {
-        _lancamentoAppRepository = lancamentoAppRepository
+    private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository
             ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
-
-        _consolidadoAppRepository = consolidadoAppRepository
+    private readonly IConsolidadoAppRepository _consolidadoAppRepository = consolidadoAppRepository
             ?? throw new ArgumentNullException(nameof(consolidadoAppRepository));
-    }
 
     /// <summary>
     /// Executa o caso de uso

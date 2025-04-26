@@ -1,6 +1,5 @@
 using FluxoCaixa.Application;
 using FluxoCaixa.Application.BuscarConsolidadoDiario;
-using FluxoCaixa.Application.ListarLancamentos;
 
 using Moq;
 

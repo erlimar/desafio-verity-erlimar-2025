@@ -1,5 +1,8 @@
 namespace FluxoCaixa.Application;
 
+/// <summary>
+/// Status da consolidação
+/// </summary>
 public enum StatusConsolidado
 {
     Pendente = 1,
