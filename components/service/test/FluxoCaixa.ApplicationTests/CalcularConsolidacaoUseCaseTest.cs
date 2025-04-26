@@ -1,5 +1,6 @@
 using FluxoCaixa.Application;
 using FluxoCaixa.Application.CalcularConsolidacao;
+using FluxoCaixa.Application.Models;
 
 using Moq;
 
@@ -66,7 +67,7 @@ public class CalcularConsolidacaoUseCaseTest
         consolidadoAppRepoMock.Setup(s => s.ObterPorIdAsync(
             "id-inexistente",
             It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Consolidado?>(null));
+            .Returns(Task.FromResult<ConsolidadoModel?>(null));
 
         var useCase = new CalcularConsolidacaoUseCase(
             new Mock<ILancamentoAppRepository>().Object,
@@ -96,7 +97,7 @@ public class CalcularConsolidacaoUseCaseTest
         consolidadoAppRepositoryMock.Setup(s => s.ObterPorIdAsync(
             "id-existente",
             It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Consolidado()
+            .ReturnsAsync(new ConsolidadoModel()
             {
                 Id = "id-existente",
                 DataHora = dataHora,
@@ -135,7 +136,7 @@ public class CalcularConsolidacaoUseCaseTest
         consolidadoAppRepositoryMock.Setup(s => s.ObterPorIdAsync(
             "id-existente",
             It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Consolidado()
+            .ReturnsAsync(new ConsolidadoModel()
             {
                 Id = "id-existente",
                 DataHora = dataHora,
@@ -188,7 +189,7 @@ public class CalcularConsolidacaoUseCaseTest
         consolidadoAppRepositoryMock.Setup(s => s.ObterPorIdAsync(
             It.IsAny<string>(),
             It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Mock<Consolidado>().Object);
+            .ReturnsAsync(new Mock<ConsolidadoModel>().Object);
 
         var useCase = new CalcularConsolidacaoUseCase(
             lancamentoAppRepositoryMock.Object,
@@ -208,7 +209,7 @@ public class CalcularConsolidacaoUseCaseTest
         consolidadoAppRepositoryMock.Setup(s => s.ObterPorIdAsync(
             It.IsAny<string>(),
             It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Mock<Consolidado>().Object);
+            .ReturnsAsync(new Mock<ConsolidadoModel>().Object);
 
         var useCase = new CalcularConsolidacaoUseCase(
             lancamentoAppRepositoryMock.Object,

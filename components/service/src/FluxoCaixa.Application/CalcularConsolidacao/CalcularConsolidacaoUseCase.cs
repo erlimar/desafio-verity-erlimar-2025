@@ -1,3 +1,6 @@
+using FluxoCaixa.Application.Models;
+using FluxoCaixa.Application.Utils;
+
 namespace FluxoCaixa.Application.CalcularConsolidacao;
 
 /// <summary>
@@ -8,7 +11,7 @@ namespace FluxoCaixa.Application.CalcularConsolidacao;
 public class CalcularConsolidacaoUseCase(
     ILancamentoAppRepository lancamentoAppRepository,
     IConsolidadoAppRepository consolidadoAppRepository)
-    : IUseCaseInputOutput<CalcularConsolidacaoForm, Consolidado>
+    : IUseCaseInputOutput<CalcularConsolidacaoForm, ConsolidadoModel>
 {
     private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository
             ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
@@ -19,9 +22,9 @@ public class CalcularConsolidacaoUseCase(
     /// Executa o caso de uso
     /// </summary>
     /// <param name="form">Dados de entrada</param>
-    /// <returns>Instância de <see cref="Consolidado"/></returns>
+    /// <returns>Instância de <see cref="ConsolidadoModel"/></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<Consolidado> ExecAsync(
+    public async Task<ConsolidadoModel> ExecAsync(
         CalcularConsolidacaoForm form,
         CancellationToken cancellationToken)
     {
@@ -52,7 +55,7 @@ public class CalcularConsolidacaoUseCase(
             dataDoDia,
             cancellationToken);
 
-        var consolidadoAtualizado = new Consolidado()
+        var consolidadoAtualizado = new ConsolidadoModel()
         {
             Id = consolidadoOriginal.Id,
             IdentificadorDono = consolidadoOriginal.IdentificadorDono,

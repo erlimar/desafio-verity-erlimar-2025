@@ -1,4 +1,4 @@
-namespace FluxoCaixa.Application;
+namespace FluxoCaixa.Application.Utils;
 
 /// <summary>
 /// Um caso de uso que requer entrada de dados e não retorna resultado

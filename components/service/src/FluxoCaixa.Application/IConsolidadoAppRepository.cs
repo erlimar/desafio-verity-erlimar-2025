@@ -1,3 +1,5 @@
+using FluxoCaixa.Application.Models;
+
 namespace FluxoCaixa.Application;
 
 /// <summary>
@@ -11,7 +13,7 @@ public interface IConsolidadoAppRepository
     /// <param name="identificadorDono">Identificador do dono</param>
     /// <param name="dataHora">Data/hora para verificar</param>
     /// <returns>Lista de consolidados registrados, ou lista vazia caso não existam</returns>
-    Task<IEnumerable<Consolidado>> ObterConsolidadosAPartirDoDiaAsync(
+    Task<IEnumerable<ConsolidadoModel>> ObterConsolidadosAPartirDoDiaAsync(
         string identificadorDono,
         DateTimeOffset dataHora,
         CancellationToken cancellationToken);
@@ -22,7 +24,7 @@ public interface IConsolidadoAppRepository
     /// <param name="identificadorDono">Identificador do dono</param>
     /// <param name="dataHora">Data/hora para verificar</param>
     /// <returns>Lista de consolidados registrados, ou lista vazia caso não existam</returns>
-    Task<IEnumerable<Consolidado>> ObterConsolidadosDaDataAsync(
+    Task<IEnumerable<ConsolidadoModel>> ObterConsolidadosDaDataAsync(
         string identificadorDono,
         DateTimeOffset dataHora,
         CancellationToken cancellationToken);
@@ -31,12 +33,12 @@ public interface IConsolidadoAppRepository
     /// Grava dados de um consolidado. Substituindo caso já exista
     /// </summary>
     /// <param name="dados">Dados para gravação</param>
-    Task GravarConsolidadoAsync(Consolidado dados, CancellationToken cancellationToken);
+    Task GravarConsolidadoAsync(ConsolidadoModel dados, CancellationToken cancellationToken);
 
     /// <summary>
     /// Obtém um consolidado por identificador
     /// </summary>
     /// <param name="consolidadoId">Identificador do consolidado</param>
-    /// <returns>Instância de <see cref="Consolidado"/> ou nulo se não existir</returns>
-    Task<Consolidado?> ObterPorIdAsync(string consolidadoId, CancellationToken cancellationToken);
+    /// <returns>Instância de <see cref="ConsolidadoModel"/> ou nulo se não existir</returns>
+    Task<ConsolidadoModel?> ObterPorIdAsync(string consolidadoId, CancellationToken cancellationToken);
 }

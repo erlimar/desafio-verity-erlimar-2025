@@ -1,3 +1,5 @@
+using FluxoCaixa.Application.Models;
+
 namespace FluxoCaixa.Application;
 
 /// <summary>
@@ -12,7 +14,7 @@ public interface ILancamentoAppRepository
     /// <returns>Total de lançamentos</returns>
     Task<int> ContarLancamentosPorFiltroAsync(
         string identificadorDono,
-        LancamentoFilter filtro,
+        FiltroLancamentoModel filtro,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -20,7 +22,7 @@ public interface ILancamentoAppRepository
     /// </summary>
     /// <param name="lancamento">Dados do lançamento</param>
     Task GravarLancamentoAsync(
-        Lancamento lancamento,
+        LancamentoModel lancamento,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -31,7 +33,7 @@ public interface ILancamentoAppRepository
     /// <param name="periodoFinal">Data limite do período</param>
     /// <param name="offset">Posição no resultado à considerar para paginação</param>
     /// <returns></returns>
-    Task<IEnumerable<Lancamento>> ListarLancamentosAsync(
+    Task<IEnumerable<LancamentoModel>> ListarLancamentosAsync(
         string identificadorDono,
         DateTimeOffset periodoInicial,
         DateTimeOffset periodoFinal,

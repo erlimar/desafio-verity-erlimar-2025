@@ -1,9 +1,9 @@
 namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
-/// Interface com provedor de identidade
+/// Adaptador de comunicação com provedor de identidade do usuário
 /// </summary>
-public interface IIdentityProviderGateway
+public interface IUserIdentityGateway
 {
     Task<bool> UsuarioExisteAsync(string id, CancellationToken cancellationToken);
 }

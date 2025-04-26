@@ -1,3 +1,6 @@
+using FluxoCaixa.Application.Models;
+using FluxoCaixa.Application.Utils;
+
 namespace FluxoCaixa.Application.BuscarConsolidadoDiario;
 
 /// <summary>
@@ -5,7 +8,7 @@ namespace FluxoCaixa.Application.BuscarConsolidadoDiario;
 /// de uma consolidação em um dia específico
 /// </summary>
 public class BuscarConsolidadoDiarioUseCase(IConsolidadoAppRepository consolidadoAppRepository)
-    : IUseCaseInputOutput<BuscarConsolidadoDiarioForm, Consolidado?>
+    : IUseCaseInputOutput<BuscarConsolidadoDiarioForm, ConsolidadoModel?>
 {
     private readonly IConsolidadoAppRepository _consolidadoAppRepository = consolidadoAppRepository ??
             throw new ArgumentNullException(nameof(consolidadoAppRepository));
@@ -14,11 +17,11 @@ public class BuscarConsolidadoDiarioUseCase(IConsolidadoAppRepository consolidad
     /// Executa o caso de uso
     /// </summary>
     /// <param name="form">Dados de entrada</param>
-    /// <returns>Retorna instância de <see cref="Consolidado"/> ou nulo</returns>
+    /// <returns>Retorna instância de <see cref="ConsolidadoModel"/> ou nulo</returns>
     /// <exception cref="ArgumentNullException">
     /// Quando os dados de entrada são inválidos
     /// </exception>
-    public async Task<Consolidado?> ExecAsync(
+    public async Task<ConsolidadoModel?> ExecAsync(
         BuscarConsolidadoDiarioForm form,
         CancellationToken cancellationToken)
     {

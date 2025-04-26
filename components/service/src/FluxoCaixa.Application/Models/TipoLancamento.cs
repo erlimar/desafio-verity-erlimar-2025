@@ -1,4 +1,4 @@
-namespace FluxoCaixa.Application;
+namespace FluxoCaixa.Application.Models;
 
 /// <summary>
 /// Tipo de lançamento

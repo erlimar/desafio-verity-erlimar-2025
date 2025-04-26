@@ -1,9 +1,9 @@
-namespace FluxoCaixa.Application;
+namespace FluxoCaixa.Application.Models;
 
 /// <summary>
 /// Um lançamento registrado
 /// </summary>
-public record class Lancamento
+public record class LancamentoModel
 {
     public string? Id { get; init; }
     public required string IdentificadorDono { get; init; }

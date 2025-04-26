@@ -1,3 +1,5 @@
+using FluxoCaixa.Application.Models;
+
 namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>

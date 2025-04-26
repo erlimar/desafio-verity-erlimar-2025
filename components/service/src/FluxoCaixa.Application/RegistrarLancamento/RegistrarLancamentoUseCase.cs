@@ -1,22 +1,25 @@
-﻿namespace FluxoCaixa.Application.RegistrarLancamento;
+﻿using FluxoCaixa.Application.Models;
+using FluxoCaixa.Application.Utils;
+
+namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
 /// Executa o caso de uso "Registrar Lançamento", que cadastra um novo lançamento
 /// </summary>
 public class RegistrarLancamentoUseCase(
-    IIdentityProviderGateway identityProviderGateway,
+    IUserIdentityGateway identityProviderGateway,
     ILancamentoAppRepository lancamentoAppRepository,
     IConsolidadoAppRepository consolidadoAppRepository,
-    IAppMessageBroker appMessageBroker)
+    IMessageBrokerGateway appMessageBroker)
     : IUseCaseInputOnly<RegistrarLancamentoForm>
 {
-    private readonly IIdentityProviderGateway _identityProviderGateway = identityProviderGateway
+    private readonly IUserIdentityGateway _identityProviderGateway = identityProviderGateway
             ?? throw new ArgumentNullException(nameof(identityProviderGateway));
     private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository
             ?? throw new ArgumentNullException(nameof(lancamentoAppRepository));
     private readonly IConsolidadoAppRepository _consolidadoAppRepository = consolidadoAppRepository
             ?? throw new ArgumentNullException(nameof(consolidadoAppRepository));
-    private readonly IAppMessageBroker _appMessageBroker = appMessageBroker
+    private readonly IMessageBrokerGateway _appMessageBroker = appMessageBroker
             ?? throw new ArgumentNullException(nameof(appMessageBroker));
 
     /// <summary>
@@ -49,7 +52,7 @@ public class RegistrarLancamentoUseCase(
 
         // Regra: Não deve ser permitido o registro de mais de um lançamento
         //        com mesmo tipo, descrição, data e hora
-        var filtroLancamentosRepetidos = new LancamentoFilter
+        var filtroLancamentosRepetidos = new FiltroLancamentoModel
         {
             DataHora = form.DataHora,
             Tipo = form.Tipo,
@@ -77,7 +80,7 @@ public class RegistrarLancamentoUseCase(
         {
             foreach (var consolidacao in consolidacoes)
             {
-                await _consolidadoAppRepository.GravarConsolidadoAsync(new Consolidado()
+                await _consolidadoAppRepository.GravarConsolidadoAsync(new ConsolidadoModel()
                 {
                     Id = consolidacao.Id,
                     IdentificadorDono = consolidacao.IdentificadorDono,
@@ -89,7 +92,7 @@ public class RegistrarLancamentoUseCase(
             }
         }
 
-        await _lancamentoAppRepository.GravarLancamentoAsync(new Lancamento()
+        await _lancamentoAppRepository.GravarLancamentoAsync(new LancamentoModel()
         {
             IdentificadorDono = form.IdentificadorDono,
             Tipo = form.Tipo,

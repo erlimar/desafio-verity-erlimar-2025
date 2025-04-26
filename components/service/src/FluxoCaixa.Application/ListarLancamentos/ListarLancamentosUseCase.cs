@@ -1,3 +1,6 @@
+using FluxoCaixa.Application.Models;
+using FluxoCaixa.Application.Utils;
+
 namespace FluxoCaixa.Application.ListarLancamentos;
 
 /// <summary>
@@ -5,7 +8,7 @@ namespace FluxoCaixa.Application.ListarLancamentos;
 /// em uma janela de período de forma paginada
 /// </summary>
 public class ListarLancamentosUseCase(ILancamentoAppRepository lancamentoAppRepository)
-    : IUseCaseInputOutput<ListarLancamentosForm, IEnumerable<Lancamento>>
+    : IUseCaseInputOutput<ListarLancamentosForm, IEnumerable<LancamentoModel>>
 {
     private readonly ILancamentoAppRepository _lancamentoAppRepository = lancamentoAppRepository ??
             throw new ArgumentNullException(nameof(lancamentoAppRepository));
@@ -21,7 +24,7 @@ public class ListarLancamentosUseCase(ILancamentoAppRepository lancamentoAppRepo
     /// <exception cref="PesquisaPeriodoMaiorQue90DiasException">
     /// Quando o período da pesquisa for superior a 90 dias
     /// </exception>
-    public async Task<IEnumerable<Lancamento>> ExecAsync(
+    public async Task<IEnumerable<LancamentoModel>> ExecAsync(
         ListarLancamentosForm form,
         CancellationToken cancellationToken)
     {

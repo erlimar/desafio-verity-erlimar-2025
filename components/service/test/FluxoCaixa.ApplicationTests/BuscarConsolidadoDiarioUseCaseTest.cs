@@ -1,5 +1,6 @@
 using FluxoCaixa.Application;
 using FluxoCaixa.Application.BuscarConsolidadoDiario;
+using FluxoCaixa.Application.Models;
 
 using Moq;
 
@@ -70,8 +71,8 @@ public class BuscarConsolidadoDiarioUseCaseTest
     [Fact(DisplayName = """O caso de uso "Buscar consolidado diário" retorna apenas o primeiro registro""")]
     public async Task RetornaApenasPrimeiroRegistroAsync()
     {
-        var primeiroRegistro = new Mock<Consolidado>().Object;
-        var segundoRegistro = new Mock<Consolidado>().Object;
+        var primeiroRegistro = new Mock<ConsolidadoModel>().Object;
+        var segundoRegistro = new Mock<ConsolidadoModel>().Object;
 
         var consolidadoAppRepositoryMock = new Mock<IConsolidadoAppRepository>();
 

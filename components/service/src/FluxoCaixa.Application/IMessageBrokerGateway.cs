@@ -3,9 +3,9 @@ using FluxoCaixa.Application.RegistrarLancamento;
 namespace FluxoCaixa.Application;
 
 /// <summary>
-/// Corretor para mensagens da aplicação
+/// Adaptador de comunicação com "message broker"
 /// </summary>
-public interface IAppMessageBroker
+public interface IMessageBrokerGateway
 {
     /// <summary>
     /// Envia mensagem <see cref="ConsolidarMessage"/>

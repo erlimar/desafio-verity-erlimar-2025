@@ -1,6 +1,6 @@
-namespace FluxoCaixa.Application;
+namespace FluxoCaixa.Application.Models;
 
-public record Consolidado
+public record ConsolidadoModel
 {
     public string? Id { get; init; }
     public required string IdentificadorDono { get; init; }
