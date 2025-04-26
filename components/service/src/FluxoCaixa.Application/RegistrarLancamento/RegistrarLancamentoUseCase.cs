@@ -1,10 +1,10 @@
 ﻿namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
-/// Executa o caso de uso "Registrar Lançamento"
+/// Executa o caso de uso "Registrar Lançamento", que cadastra um novo lançamento
 /// </summary>
 public class RegistrarLancamentoUseCase
-    : IUseCaseWithoutOutput<RegistrarLancamentoForm>
+    : IUseCaseInputOnly<RegistrarLancamentoForm>
 {
     private readonly IIdentityProviderGateway _identityProviderGateway;
     private readonly ILancamentoAppRepository _lancamentoAppRepository;
@@ -35,8 +35,15 @@ public class RegistrarLancamentoUseCase
     /// </summary>
     /// <param name="form">Dados de entrada</param>
     /// <returns></returns>
+    /// <exception cref="ArgumentNullException">
+    /// Quando os dados de entrada são inválidos
+    /// </exception>
     /// <exception cref="DonoLancamentoInvalidoException">
     /// Quando o dono do lançamento não existe
+    /// </exception>
+    /// <exception cref="LancamentoRepetidoException">
+    /// Quando os dados do lançamento estão repedidos em tipo, descrição e
+    /// data/hora.
     /// </exception>
     public async Task ExecAsync(RegistrarLancamentoForm form, CancellationToken cancellationToken)
     {
@@ -55,13 +62,13 @@ public class RegistrarLancamentoUseCase
         //        com mesmo tipo, descrição, data e hora
         var filtroLancamentosRepetidos = new LancamentoFilter
         {
-            IdentificadorDono = form.IdentificadorDono,
             DataHora = form.DataHora,
             Tipo = form.Tipo,
             Descricao = form.Descricao
         };
 
-        if (await _lancamentoAppRepository.ObterTotalLancamentosPorFiltroAsync(
+        if (await _lancamentoAppRepository.ContarLancamentosPorFiltroAsync(
+            form.IdentificadorDono,
             filtroLancamentosRepetidos,
             cancellationToken) > 0)
         {

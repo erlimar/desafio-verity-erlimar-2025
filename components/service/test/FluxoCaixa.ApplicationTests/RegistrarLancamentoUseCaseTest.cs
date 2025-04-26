@@ -5,11 +5,11 @@ using Moq;
 
 namespace FluxoCaixa.ApplicationTests;
 
-[Trait("Target", nameof(RegistrarLancamentoUseCase))]
+[Trait("sut", nameof(RegistrarLancamentoUseCase))]
 public class RegistrarLancamentoUseCaseTest
 {
-    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IIdentityProviderGateway]")]
-    public void CasoDeUsoRequerUmGatewayDoIdentityProviderAsync()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer um [IIdentityProviderGateway]""")]
+    public void RequerUmGatewayDoIdentityProvider()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
@@ -23,8 +23,8 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("identityProviderGateway", exception.ParamName);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [ILancamentoAppRepository]")]
-    public void CasoDeUsoRequerUmRepositorioDeLancamentoAsync()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer um [ILancamentoAppRepository]""")]
+    public void RequerUmRepositorioDeLancamento()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
@@ -39,8 +39,8 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("lancamentoAppRepository", exception.ParamName);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IAppMessageBroker]")]
-    public void CasoDeUsoRequerUmCorretorDeMensagensAsync()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer um [IAppMessageBroker]""")]
+    public void RequerUmCorretorDeMensagens()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var consolidadoAppRepository = new Mock<IConsolidadoAppRepository>().Object;
@@ -55,8 +55,8 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("appMessageBroker", exception.ParamName);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer um [IConsolidadoAppRepository]")]
-    public void CasoDeUsoRequerUmRepositorioDeConsolidadoAsync()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer um [IConsolidadoAppRepository]""")]
+    public void RequerUmRepositorioDeConsolidado()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
@@ -71,8 +71,8 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("consolidadoAppRepository", exception.ParamName);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Registrar Lançamento\" requer dados de entrada")]
-    public async Task CasoDeUsoRequerDadosDeEntradaAsync()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer dados de entrada""")]
+    public async Task RequerDadosDeEntradaAsync()
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
@@ -89,11 +89,11 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Equal("form", exception.ParamName);
     }
 
-    [Theory(DisplayName = "O caso de uso \"Registrar Lançamento\" requer identificador do dono")]
+    [Theory(DisplayName = """O caso de uso "Registrar Lançamento" requer identificador do dono""")]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("  ")]
-    public async Task CasoDeUsoRequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
+    public async Task RequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
@@ -115,11 +115,11 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Contains("O identificador do dono não pode ser vazio", exception.Message);
     }
 
-    [Theory(DisplayName = "O caso de uso \"Registrar Lançamento\" requer uma descrição")]
+    [Theory(DisplayName = """O caso de uso "Registrar Lançamento" requer uma descrição""")]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task CasoDeUsoRequerDescricaoValidaAsync(string? descricaoInvalida)
+    public async Task RequerDescricaoValidaAsync(string? descricaoInvalida)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
@@ -141,12 +141,12 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Contains("A descrição não pode ser vazia", exception.Message);
     }
 
-    [Theory(DisplayName = "O caso de uso \"Registrar Lançamento\" requer valor maior que zero")]
+    [Theory(DisplayName = """O caso de uso "Registrar Lançamento" requer valor maior que zero""")]
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(-79235)]
     [InlineData(-0.000000000001)]
-    public async Task CasoDeUsoRequerValorMaiorQueZeroAsync(decimal valorInvalido)
+    public async Task RequerValorMaiorQueZeroAsync(decimal valorInvalido)
     {
         var identityProviderGateway = new Mock<IIdentityProviderGateway>().Object;
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
@@ -168,8 +168,8 @@ public class RegistrarLancamentoUseCaseTest
         Assert.Contains("O valor precisa ser maior que zero", exception.Message);
     }
 
-    [Fact(DisplayName = "O dono deve existir")]
-    public async Task ODonoDeveExistir()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" requer que o dono exista""")]
+    public async Task ODonoDeveExistirAsync()
     {
         var identityProviderMock = new Mock<IIdentityProviderGateway>();
 
@@ -194,15 +194,15 @@ public class RegistrarLancamentoUseCaseTest
                 1,
                 "Descricao"), CancellationToken.None));
 
-        Assert.Equal("O dono de lançamento \"codigo-nao-existente\" informado não é válido", exception.Message);
+        Assert.Equal("""O dono de lançamento "codigo-nao-existente" informado não é válido""", exception.Message);
 
         identityProviderMock.Verify(m => m.UsuarioExisteAsync(
             "codigo-nao-existente",
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    [Fact(DisplayName = "Não deve permitir lançamento repetido")]
-    public async Task NaoDevePermitirLancamentoRepetido()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" não permite lançamento repetido""")]
+    public async Task NaoDevePermitirLancamentoRepetidoAsync()
     {
         var identityProviderMock = new Mock<IIdentityProviderGateway>();
 
@@ -211,7 +211,8 @@ public class RegistrarLancamentoUseCaseTest
 
         var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
 
-        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltroAsync(
+        lancamentoAppRepositoryMock.Setup(s => s.ContarLancamentosPorFiltroAsync(
+            It.IsAny<string>(),
             It.IsAny<LancamentoFilter>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
@@ -236,7 +237,8 @@ public class RegistrarLancamentoUseCaseTest
         identityProviderMock.Verify(m => m.UsuarioExisteAsync(
             "codigo-dono",
             It.IsAny<CancellationToken>()), Times.Once);
-        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltroAsync(
+        lancamentoAppRepositoryMock.Verify(m => m.ContarLancamentosPorFiltroAsync(
+            It.IsAny<string>(),
             It.IsAny<LancamentoFilter>(),
             It.IsAny<CancellationToken>()), Times.Once);
         consolidadoAppRepositoryMock.Verify(m => m.ObterConsolidadosAPartirDoDiaAsync(
@@ -248,8 +250,8 @@ public class RegistrarLancamentoUseCaseTest
             It.IsAny<CancellationToken>()), Times.Never);
     }
 
-    [Fact(DisplayName = "Deve invalidar os consolidados à partir do dia caso existam")]
-    public async Task DeveInvalidarConsolidadosCasoExistam()
+    [Fact(DisplayName = """O caso de uso "Registrar Lançamento" invalida todos os consolidados à partir do dia do lançamento""")]
+    public async Task DeveInvalidarConsolidadosCasoExistamAsync()
     {
         var identityProviderMock = new Mock<IIdentityProviderGateway>();
 
@@ -260,7 +262,8 @@ public class RegistrarLancamentoUseCaseTest
 
         var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
 
-        lancamentoAppRepositoryMock.Setup(s => s.ObterTotalLancamentosPorFiltroAsync(
+        lancamentoAppRepositoryMock.Setup(s => s.ContarLancamentosPorFiltroAsync(
+            It.IsAny<string>(),
             It.IsAny<LancamentoFilter>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(0);
@@ -304,7 +307,8 @@ public class RegistrarLancamentoUseCaseTest
         identityProviderMock.Verify(m => m.UsuarioExisteAsync(
             "codigo-dono",
             It.IsAny<CancellationToken>()), Times.Once);
-        lancamentoAppRepositoryMock.Verify(m => m.ObterTotalLancamentosPorFiltroAsync(
+        lancamentoAppRepositoryMock.Verify(m => m.ContarLancamentosPorFiltroAsync(
+            It.IsAny<string>(),
             It.IsAny<LancamentoFilter>(),
             It.IsAny<CancellationToken>()), Times.Once);
         lancamentoAppRepositoryMock.Verify(m => m.GravarLancamentoAsync(

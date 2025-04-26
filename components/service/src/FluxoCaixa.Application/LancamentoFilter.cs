@@ -5,7 +5,6 @@ namespace FluxoCaixa.Application;
 /// </summary>
 public record class LancamentoFilter
 {
-    public string? IdentificadorDono { get; init; }
     public TipoLancamento? Tipo { get; init; }
     public DateTimeOffset? DataHora { get; init; }
     public decimal? Valor { get; init; }

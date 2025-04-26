@@ -1,7 +1,7 @@
 namespace FluxoCaixa.Application.ListarLancamentos;
 
 /// <summary>
-/// Dados de entrada do caso se uso <see cref="ListarLancamentosUseCase"/>
+/// Dados de entrada para caso de uso <see cref="ListarLancamentosUseCase"/>
 /// </summary>
 /// <param name="IdentificadorDono">Identificador do dono</param>
 /// <param name="PeriodoInicial">Data inicial do período</param>

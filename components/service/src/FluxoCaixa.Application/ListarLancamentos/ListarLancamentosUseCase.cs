@@ -1,9 +1,10 @@
 namespace FluxoCaixa.Application.ListarLancamentos;
 
 /// <summary>
-/// Executa o caso de uso "Visualizar lançamentos"
+/// Executa o caso de uso "Visualizar lançamentos", que pesquisa os lançamentos
+/// em uma janela de período de forma paginada
 /// </summary>
-public class ListarLancamentosUseCase : IUseCaseWithOutput<ListarLancamentosForm, IEnumerable<Lancamento>>
+public class ListarLancamentosUseCase : IUseCaseInputOutput<ListarLancamentosForm, IEnumerable<Lancamento>>
 {
     private readonly ILancamentoAppRepository _lancamentoAppRepository;
 
@@ -18,6 +19,9 @@ public class ListarLancamentosUseCase : IUseCaseWithOutput<ListarLancamentosForm
     /// </summary>
     /// <param name="form">Dados de entrada</param>
     /// <returns>Retorna lançamentos encontrados</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Quando os dados de entrada são inválidos
+    /// </exception>
     /// <exception cref="PesquisaPeriodoMaiorQue90DiasException">
     /// Quando o período da pesquisa for superior a 90 dias
     /// </exception>
@@ -40,7 +44,8 @@ public class ListarLancamentosUseCase : IUseCaseWithOutput<ListarLancamentosForm
             form.IdentificadorDono,
             form.PeriodoInicial,
             form.PeriodoFinal,
-            form.Offset);
+            form.Offset,
+            cancellationToken);
     }
 
     private static void ValidateForm(ListarLancamentosForm form)

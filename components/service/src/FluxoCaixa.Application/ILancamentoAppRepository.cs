@@ -10,7 +10,8 @@ public interface ILancamentoAppRepository
     /// </summary>
     /// <param name="filtro">Dados do filtro</param>
     /// <returns>Total de lançamentos</returns>
-    Task<int> ObterTotalLancamentosPorFiltroAsync(
+    Task<int> ContarLancamentosPorFiltroAsync(
+        string identificadorDono,
         LancamentoFilter filtro,
         CancellationToken cancellationToken);
 
@@ -18,7 +19,9 @@ public interface ILancamentoAppRepository
     /// Grava dados de um lançamento
     /// </summary>
     /// <param name="lancamento">Dados do lançamento</param>
-    Task GravarLancamentoAsync(Lancamento lancamento, CancellationToken cancellationToken);
+    Task GravarLancamentoAsync(
+        Lancamento lancamento,
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// Retorna uma lista de lançamentos no período à partir do offset informado
@@ -32,5 +35,28 @@ public interface ILancamentoAppRepository
         string identificadorDono,
         DateTimeOffset periodoInicial,
         DateTimeOffset periodoFinal,
-        int offset = 0);
+        int offset,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Soma os valores dos lançamentos antes do período informado
+    /// </summary>
+    /// <param name="identificadorDono">Identificador do dono</param>
+    /// <param name="dataLimite">Data limite para os lançamentos</param>
+    /// <returns>Valor somado do período</returns>
+    Task<decimal> SomarValoresLancamentosAntesDeAsync(
+        string identificadorDono,
+        DateTimeOffset dataLimite,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Soma os valores dos lançamentos no dia do período informado
+    /// </summary>
+    /// <param name="identificadorDono">Identificador do dono</param>
+    /// <param name="dataLimite">Data para os lançamentos</param>
+    /// <returns>Valor somado do período</returns>
+    Task<decimal> SomarValoresLancamentosDoDiaAsync(
+        string identificadorDono,
+        DateTimeOffset dataLimite,
+        CancellationToken cancellationToken);
 }

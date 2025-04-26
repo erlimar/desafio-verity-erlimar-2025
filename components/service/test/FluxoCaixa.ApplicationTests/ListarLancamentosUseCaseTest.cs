@@ -5,12 +5,11 @@ using Moq;
 
 namespace FluxoCaixa.ApplicationTests;
 
-[Trait("Target", nameof(ListarLancamentosUseCase))]
-
+[Trait("sut", nameof(ListarLancamentosUseCase))]
 public class ListarLancamentosUseCaseTest
 {
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" requer um [ILancamentoAppRepository]")]
-    public void CasoDeUsoRequerUmRepositorioDeLancamentoAsync()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" requer um [ILancamentoAppRepository]""")]
+    public void RequerUmRepositorioDeLancamento()
     {
         var exception = Assert.Throws<ArgumentNullException>(
             () => new ListarLancamentosUseCase(null!));
@@ -18,8 +17,8 @@ public class ListarLancamentosUseCaseTest
         Assert.Equal("lancamentoAppRepository", exception.ParamName);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" requer dados de entrada")]
-    public async Task CasoDeUsoRequerDadosDeEntradaAsync()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" requer dados de entrada""")]
+    public async Task RequerDadosDeEntradaAsync()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepository);
@@ -30,11 +29,11 @@ public class ListarLancamentosUseCaseTest
         Assert.Equal("form", exception.ParamName);
     }
 
-    [Theory(DisplayName = "O caso de uso \"Visualizar lançamentos\"  requer identificador do dono")]
+    [Theory(DisplayName = """O caso de uso "Visualizar lançamentos"  requer identificador do dono""")]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("  ")]
-    public async Task CasoDeUsoRequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
+    public async Task RequerIdentificadorDeDonoValidoAsync(string? identificadorInvalido)
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepository);
@@ -50,8 +49,8 @@ public class ListarLancamentosUseCaseTest
         Assert.Contains("O identificador do dono não pode ser vazio", exception.Message);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" requer uma data final à partir da data inicial")]
-    public async Task CasoDeUsoRequerDataFinalMaiorOuIgualDataInicial()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" requer uma data final à partir da data inicial""")]
+    public async Task RequerDataFinalMaiorOuIgualDataInicialAsync()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepository);
@@ -67,8 +66,8 @@ public class ListarLancamentosUseCaseTest
         Assert.Contains("Você deve informar um período final maior ou igual ao período inicial", exception.Message);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" só permite intervalos de até 90 dias")]
-    public async Task CasoDeUsoSoPermiteIntervalosDeAte90Dias()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" só permite intervalos de até 90 dias""")]
+    public async Task SoPermiteIntervalosDeAte90DiasAsync()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepository);
@@ -83,8 +82,8 @@ public class ListarLancamentosUseCaseTest
         Assert.Contains("Você só pode pesquisar lançamentos em um período de até 90 dias", exception.Message);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" requer um offset à partir de zero")]
-    public async Task CasoDeUsoRequerOffsetMaiorOuIgualZero()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" requer um offset à partir de zero""")]
+    public async Task RequerOffsetMaiorOuIgualZeroAsync()
     {
         var lancamentoAppRepository = new Mock<ILancamentoAppRepository>().Object;
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepository);
@@ -100,8 +99,8 @@ public class ListarLancamentosUseCaseTest
         Assert.Contains("Informe um Offset à partir de zero", exception.Message);
     }
 
-    [Fact(DisplayName = "O caso de uso \"Visualizar lançamentos\" deve listar do repositório")]
-    public async Task CasoDeUsoDeveListarDoRepositorio()
+    [Fact(DisplayName = """O caso de uso "Visualizar lançamentos" deve listar do repositório""")]
+    public async Task DeveListarDoRepositorioAsync()
     {
         var lancamentoAppRepositoryMock = new Mock<ILancamentoAppRepository>();
         var useCase = new ListarLancamentosUseCase(lancamentoAppRepositoryMock.Object);
@@ -119,6 +118,7 @@ public class ListarLancamentosUseCaseTest
             "identificador-valido",
             periodoInicial,
             periodoFinal,
-            3), Times.Once);
+            3,
+            CancellationToken.None), Times.Once);
     }
 }

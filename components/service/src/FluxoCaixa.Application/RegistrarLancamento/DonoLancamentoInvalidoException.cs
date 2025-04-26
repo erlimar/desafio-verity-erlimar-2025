@@ -6,7 +6,7 @@ namespace FluxoCaixa.Application.RegistrarLancamento;
 public class DonoLancamentoInvalidoException : Exception
 {
     public DonoLancamentoInvalidoException(string identificadorDono)
-    : base($"O dono de lançamento \"{identificadorDono}\" informado não é válido")
+    : base($"""O dono de lançamento "{identificadorDono}" informado não é válido""")
     {
     }
 }

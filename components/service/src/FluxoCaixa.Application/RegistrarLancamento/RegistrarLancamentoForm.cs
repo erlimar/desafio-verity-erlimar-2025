@@ -1,7 +1,7 @@
 namespace FluxoCaixa.Application.RegistrarLancamento;
 
 /// <summary>
-/// Dados de entrada do caso se uso <see cref="RegistrarLancamentoUseCase"/>
+/// Dados de entrada para caso de uso <see cref="RegistrarLancamentoUseCase"/>
 /// </summary>
 /// <param name="IdentificadorDono">Identificador do dono</param>
 /// <param name="Tipo">Tipo do lançamento</param>

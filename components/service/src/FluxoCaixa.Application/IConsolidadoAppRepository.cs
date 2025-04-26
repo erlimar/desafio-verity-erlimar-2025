@@ -21,4 +21,11 @@ public interface IConsolidadoAppRepository
     /// </summary>
     /// <param name="dados">Dados para gravação</param>
     Task GravarConsolidadoAsync(Consolidado dados, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Obtém um consolidado por identificador
+    /// </summary>
+    /// <param name="consolidadoId">Identificador do consolidado</param>
+    /// <returns>Instância de <see cref="Consolidado"/> ou nulo se não existir</returns>
+    Task<Consolidado?> ObterPorIdAsync(string consolidadoId, CancellationToken cancellationToken);
 }

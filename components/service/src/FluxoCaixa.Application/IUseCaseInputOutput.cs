@@ -4,7 +4,7 @@ namespace FluxoCaixa.Application;
 /// Um caso de uso que requer entrada de dados e retorna resultado
 /// </summary>
 /// <typeparam name="TForm">Tipo do dado de entrada</typeparam>
-public interface IUseCaseWithOutput<TForm, TOutput>
+public interface IUseCaseInputOutput<TForm, TOutput>
 {
     /// <summary>
     /// Executa o caso de uso
