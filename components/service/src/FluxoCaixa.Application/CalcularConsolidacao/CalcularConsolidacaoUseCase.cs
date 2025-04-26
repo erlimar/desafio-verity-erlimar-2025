@@ -23,7 +23,12 @@ public class CalcularConsolidacaoUseCase(
     /// </summary>
     /// <param name="form">Dados de entrada</param>
     /// <returns>Instância de <see cref="ConsolidadoModel"/></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <exception cref="ArgumentNullException">
+    /// Quando os dados de entrada são inválidos
+    /// </exception>
+    /// <exception cref="ConsolidadoNaoExisteException">
+    /// Quando o identificador do consolidado informado não está registrado
+    /// </exception>
     public async Task<ConsolidadoModel> ExecAsync(
         CalcularConsolidacaoForm form,
         CancellationToken cancellationToken)
