@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MainNavbarComponent } from "./main-navbar/main-navbar.component";
+import { AuthService } from './auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -9,5 +11,7 @@ import { MainNavbarComponent } from "./main-navbar/main-navbar.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'fluxo-caixa';
+  constructor(authService: AuthService) {
+    authService.configure();
+  }
 }

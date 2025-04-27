@@ -1,3 +1,8 @@
 <p>
   Seja bem vindo! Este é o aplicativo do desafio <strong>Verity 2025</strong> feito por <strong>Erlimar</strong>!
 </p>
+<div *ngIf="!isAuthenticated">
+  <p>
+    Você não está autenticado, <a href="#" (click)="login()">clique aqui para fazer login!</a>
+  </p>
+</div>
