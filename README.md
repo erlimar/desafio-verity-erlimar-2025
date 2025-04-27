@@ -15,6 +15,8 @@ Você vai precisar de:
 - [.NET SDK 9.0](https://dotnet.microsoft.com/pt-br/download/dotnet/9.0)
 - [Docker (com Compose)](https://docs.docker.com/compose/)
 - [Node.js 22.0 (Com NPM 10.9)](https://nodejs.org/pt)
+- [Angular CLI 19](https://angular.dev/tools/cli)
+  - `npm install -g @angular/cli`
 
 ## Passo a passo para preparar o ambiente
 
