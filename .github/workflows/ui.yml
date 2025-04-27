@@ -1,4 +1,4 @@
-name: CI
+name: Angular UI CI
 
 on:
   push:
@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+        working-directory: ./components/ui/fluxo-caixa
 
       - name: Install Dependencies
         run: npm ci
