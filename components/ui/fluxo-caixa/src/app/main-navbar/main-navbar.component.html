@@ -1,7 +1,7 @@
 <div>
   <p *ngIf="isAuthenticated">
     Você está autenticado como:
-    @if(userInfo?.name != userInfo?.nickname) {
+    @if(userInfo?.name !== userInfo?.nickname) {
     <strong>{{ userInfo?.name }} ({{ userInfo?.nickname }})</strong>
     } @else {
     <strong>{{ userInfo?.name }} </strong>

@@ -14,13 +14,16 @@ import { AuthService } from './auth.service';
 export class OidcGuard implements CanActivate {
   constructor(private authService: AuthService) { }
 
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   canActivate(
-    _route: ActivatedRouteSnapshot,
-    _state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+
     if (this.authService.isAuthenticated()) {
       return true;
     }
 
     return false;
   }
+  /* eslint-enable  @typescript-eslint/no-unused-vars */
 }
