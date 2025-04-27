@@ -20,16 +20,16 @@ Você vai precisar de:
 
 1) Crie o arquivo `.env` com variáveis de ambiente para seus acessos:
 ```ini
-KC_BOOTSTRAP_ADMIN_USERNAME={Nome do usuário adminisadmintrador do Keycloak}
-KC_BOOTSTRAP_ADMIN_PASSWORD={Senha do usuário admin do Keycloak}
-KEYCLOAK_DB={Nome do banco do Keycloak}
-POSTGRES_USER={Nome do usuário Postgres para Keycloak}
-POSTGRES_PASSWORD={Senha do usuário Postgres pra Keycloak}
-MONGODB_USERNAME={Nome do usuário do MongoDB}
-MONGODB_PASSWORD={Senha do usuário do MongoDB}
-RABBITMQ_USERNAME={Nome do usuário do RabbitMQ}
-RABBITMQ_PASSWORD={Senha do usuário do RabbitMQ}
-DESAFIO_VERITY_WEBAPI_SECRET={Segredo da API da solução}
+KC_BOOTSTRAP_ADMIN_USERNAME="Nome do usuário adminisadmintrador do Keycloak"
+KC_BOOTSTRAP_ADMIN_PASSWORD="Senha do usuário admin do Keycloak"
+KEYCLOAK_DB="Nome do banco do Keycloak"
+POSTGRES_USER="Nome do usuário Postgres para Keycloak"
+POSTGRES_PASSWORD="Senha do usuário Postgres pra Keycloak"
+MONGODB_USERNAME="Nome do usuário do MongoDB"
+MONGODB_PASSWORD="Senha do usuário do MongoDB"
+RABBITMQ_USERNAME="Nome do usuário do RabbitMQ"
+RABBITMQ_PASSWORD="Senha do usuário do RabbitMQ"
+DESAFIO_VERITY_WEBAPI_SECRET="Segredo da API da solução"
 ```
 
 Exemplo:
@@ -46,8 +46,8 @@ RABBITMQ_PASSWORD=4fea21a05b99f27f0414d642
 DESAFIO_VERITY_WEBAPI_SECRET=63018ff4e991c64c2fc0157f732ae722d1da0f382bf6acea
 ```
 
-> Gere uma senha aleatória caracteres com ajuda do OpenSSL: 
-> Ex: 32 caracteres em hexadecimal - `openssl rand -hex 32`
+> Gere uma senha aleatória com ajuda do OpenSSL: Ex: 32 caracteres em hexadecimal
+> - `openssl rand -hex 32`
 
 Você usará esses dados para acessar o Keycloak, MongoDB, Rabbiq MQ e terá o
 segredo da API no Keycloak via OpenID Connect.
@@ -56,8 +56,8 @@ Quando tudo estiver disponível (pode levar alguns minutos) você terá:
 
 - Interface de administração do Keycloak: http://localhost:8080
 - Interface de administração do RabbitMQ: http://localhost:15672
-- Banco de dados Postgres do Keycloak: localhost:5432
-- Banco de dados MongoDB: localhost:27017
+- Banco de dados Postgres do Keycloak em `localhost:5432`
+- Banco de dados MongoDB em `localhost:27017`
 
 > Se você tiver problemas com as portas usadas, porque já as usa em outras
 > em outras aplicações e não pode se desfazer delas, então altere as configurações
@@ -69,7 +69,7 @@ docker compose up -d
 ```
 
 Mesmo quando os serviços já estiverem iniciados, demora um tempo até que tudo
-este pronto para uso. Então verifique os logs até que veja as mensagems informando
+esteja pronto para uso. Então verifique os logs até que veja as mensagems informando
 que os serviços já estão prontos.
 
 ```sh
@@ -88,4 +88,5 @@ keycloak-1 [...] Listening on: http://0.0.0.0:8080 [...]
 ```
 
 > O parâmetro `-f` ao final trava a tela para mostrar os logs em tempo real,
-> então use um `Ctrl + C` para encerrar o processo, ou não use o parâmetro `-f`.
+> então use um `Ctrl + C` para encerrar o processo, ou não use o parâmetro
+> `-f` nos comandods.
