@@ -41,9 +41,33 @@ jobs:
         run: npm run lint
         working-directory: ./components/ui/fluxo-caixa
 
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ./components/ui/fluxo-caixa/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./components/ui/fluxo-caixa
+
+      - name: Build development
+        run: npm run build
+        working-directory: ./components/ui/fluxo-caixa
+
   test:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
+    needs: build
 
     steps:
       - uses: actions/checkout@v4
@@ -63,24 +87,4 @@ jobs:
         run: npm run test:ci
         working-directory: ./components/ui/fluxo-caixa
 
-  build:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: ./components/ui/fluxo-caixa/package-lock.json
-
-      - name: Install Dependencies
-        run: npm ci
-        working-directory: ./components/ui/fluxo-caixa
-
-      - name: Build development
-        run: npm run build
-        working-directory: ./components/ui/fluxo-caixa
+  
