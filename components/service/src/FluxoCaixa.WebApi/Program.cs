@@ -11,6 +11,8 @@ app.UseExceptionHandler();
 
 app.UseOpenIdConnectAuthorization();
 
-app.MapUserMeEndpoint();
+app.MapGroup("/lancamentos")
+    .WithTags("Lançamentos")
+    .MapRegistrarLancamento();
 
 app.Run();
