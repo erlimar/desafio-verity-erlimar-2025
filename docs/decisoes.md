@@ -70,7 +70,7 @@ na solução futuramente:
   disponível para implementação da solução. Mas em uma situação real ou a
   aplicação permitiria o *auto-registro* de usuários, ou um outro serviço faria
   essa gestão (*back office* por exemplo). Por hora faremos o registro de
-  usuários diretamente no console do [Keycloak][KEYCLOAK].
+  usuários diretamente pelo [Keycloak][KEYCLOAK].
 - A implementação atual não entrega artefatos nem guias para implantação em
   ambiente de produção devido ao tempo disponível para concepção da solução.
   Mas uma ideia de como seria a infraestrutura de produção é apresentada para
