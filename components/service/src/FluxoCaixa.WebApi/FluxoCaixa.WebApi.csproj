@@ -14,4 +14,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FluxoCaixa.Application\FluxoCaixa.Application.csproj" />
+    <ProjectReference Include="..\FluxoCaixa.DatabaseAccess\FluxoCaixa.DatabaseAccess.csproj" />
+    <ProjectReference Include="..\FluxoCaixa.KeycloakGateway\FluxoCaixa.KeycloakGateway.csproj" />
+    <ProjectReference Include="..\FluxoCaixa.RabbitMQGateway\FluxoCaixa.RabbitMQGateway.csproj" />
+  </ItemGroup>
+
 </Project>
