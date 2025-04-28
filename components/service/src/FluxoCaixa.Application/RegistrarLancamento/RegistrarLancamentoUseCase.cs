@@ -27,6 +27,9 @@ public class RegistrarLancamentoUseCase(
     /// </summary>
     /// <param name="form">Dados de entrada</param>
     /// <returns></returns>
+    /// <exception cref="ArgumentException">
+    /// Quando os dados de entrada são inválidos
+    /// </exception>
     /// <exception cref="ArgumentNullException">
     /// Quando os dados de entrada são inválidos
     /// </exception>

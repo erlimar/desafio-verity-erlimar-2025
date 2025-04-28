@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
+using FluxoCaixa.Application.RegistrarLancamento;
 using FluxoCaixa.WebApi.Models;
 
 using static FluxoCaixa.WebApi.ViewModelValidator;
@@ -17,11 +18,29 @@ public static class MapLancamentoEndpoints
     /// </summary>
     public static RouteGroupBuilder MapRegistrarLancamento(this RouteGroupBuilder group)
     {
-        _ = group.MapPost("/", (ClaimsPrincipal principal, RegistrarLancamentoViewModel model) =>
+        _ = group.MapPost("/", async (
+            ClaimsPrincipal principal,
+            RegistrarLancamentoUseCase registrarLancamentoUseCase,
+            RegistrarLancamentoViewModel model,
+            CancellationToken cancellationToken) =>
         {
             if (!ViewModelIsValid(model, out IEnumerable<ValidationResult> validationResult))
             {
                 return Results.BadRequest(validationResult);
+            }
+
+            try
+            {
+                await registrarLancamentoUseCase.ExecAsync(
+                    model.ToUseCaseForm(principal.GetAuthenticatedUserId()),
+                    cancellationToken);
+            }
+            catch (Exception e) when (e is ArgumentNullException or ArgumentException or DonoLancamentoInvalidoException or LancamentoRepetidoException)
+            {
+                return Results.BadRequest(new List<ValidationResult>
+                {
+                    new(e.Message)
+                });
             }
 
             return Results.Ok(principal.Claims.Select(c => new { c.Type, c.Value }));
