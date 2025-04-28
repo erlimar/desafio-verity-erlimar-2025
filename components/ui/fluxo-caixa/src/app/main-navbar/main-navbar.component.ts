@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { AppUserInfo } from '../app-user-info.model';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-main-navbar',
@@ -19,6 +20,10 @@ export class MainNavbarComponent {
 
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  get manageAccountUrl(): string {
+    return environment.oidc.manageAccountUrl;
   }
 
   logout() {
