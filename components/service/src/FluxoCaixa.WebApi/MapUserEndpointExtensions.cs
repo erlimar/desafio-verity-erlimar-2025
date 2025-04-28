@@ -14,8 +14,7 @@ public static class MapUserEndpointExtensions
     {
         endpoints.MapGet("users/me", (ClaimsPrincipal claimsPrincipal) =>
         {
-            throw new NotImplementedException("Implementar o método para obter o usuário atual.");
-            //return claimsPrincipal.Claims.ToDictionary(c => c.Type, c => c.Value);
+            return claimsPrincipal.Claims.Select(c => new { c.Type, c.Value });
         })
         .WithSummary("Obtém o usuário atual")
         .WithDescription("Exibe as informações do usuário atual, incluindo o nome e o e-mail.")
@@ -23,7 +22,8 @@ public static class MapUserEndpointExtensions
         .Produces(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status400BadRequest)
         // .Accepts(typeof(ClaimsPrincipal),"application/json" )
-        .WithOpenApi();
+        .WithOpenApi()
+        .RequireAuthorization();
 
         return endpoints;
     }
