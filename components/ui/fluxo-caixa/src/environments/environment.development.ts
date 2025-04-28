@@ -1,8 +1,8 @@
 export const environment = {
   oidc: {
-    issuer: 'http://localhost:8080/realms/master',
-    manageAccountUrl: 'http://localhost:8080/realms/master/account',
-    clientId: 'desafio-verity-webapp',
+    issuer: 'http://localhost:8080/realms/desafio-verity',
+    manageAccountUrl: 'http://localhost:8080/realms/desafio-verity/account',
+    clientId: 'webapp',
     scope: 'openid profile email',
     useHttps: false
   }
