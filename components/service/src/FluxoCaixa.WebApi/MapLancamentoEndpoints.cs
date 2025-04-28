@@ -2,9 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 using FluxoCaixa.Application.RegistrarLancamento;
+using FluxoCaixa.WebApi.Extensions;
 using FluxoCaixa.WebApi.Models;
 
-using static FluxoCaixa.WebApi.ViewModelValidator;
+using static FluxoCaixa.WebApi.Utils.ViewModelValidator;
 
 namespace FluxoCaixa.WebApi;
 
@@ -43,7 +44,7 @@ public static class MapLancamentoEndpoints
                 });
             }
 
-            return Results.Ok(principal.Claims.Select(c => new { c.Type, c.Value }));
+            return Results.Created();
         })
         .WithSummary("Registrar lançamento")
         .WithDescription("""Executa o caso de uso "Registrar Lançamento", que cadastra um novo lançamento""")

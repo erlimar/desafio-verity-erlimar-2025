@@ -2,6 +2,7 @@ using FluxoCaixa.DatabaseAccess;
 using FluxoCaixa.KeycloakGateway;
 using FluxoCaixa.RabbitMQGateway;
 using FluxoCaixa.WebApi;
+using FluxoCaixa.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

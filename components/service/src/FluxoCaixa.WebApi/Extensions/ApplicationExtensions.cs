@@ -1,6 +1,6 @@
 using FluxoCaixa.Application.RegistrarLancamento;
 
-namespace FluxoCaixa.WebApi;
+namespace FluxoCaixa.WebApi.Extensions;
 
 /// <summary>
 /// Métodos para configurar recursos da camada de aplicação

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace FluxoCaixa.WebApi;
+namespace FluxoCaixa.WebApi.Extensions;
 
 /// <summary>
 /// Extensões para <see cref="ClaimsPrincipal"/>

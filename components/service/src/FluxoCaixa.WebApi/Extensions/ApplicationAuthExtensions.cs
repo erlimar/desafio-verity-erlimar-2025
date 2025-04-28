@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace FluxoCaixa.WebApi;
+namespace FluxoCaixa.WebApi.Extensions;
 
 /// <summary>
 /// Métodos para configurar serviços de autenticação e autorização

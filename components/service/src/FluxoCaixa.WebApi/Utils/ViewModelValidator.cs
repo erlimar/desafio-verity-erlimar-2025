@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FluxoCaixa.WebApi;
+namespace FluxoCaixa.WebApi.Utils;
 
 /// <summary>
 /// Classe de validação de ViewModels
