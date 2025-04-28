@@ -92,3 +92,23 @@ keycloak-1 [...] Listening on: http://0.0.0.0:8080 [...]
 > O parâmetro `-f` ao final trava a tela para mostrar os logs em tempo real,
 > então use um `Ctrl + C` para encerrar o processo, ou não use o parâmetro
 > `-f` nos comandods.
+
+3) Atualize os segredos do usuário para os projetos 
+
+Agora você deve usar os valores no arquivo `.env` para preencher algumas
+variáveis nos arquivos de configuração específicos de cada projeto.
+Para isso temos o script PowerShell `eng/update-user-secrets.ps1` pra te
+ajudar com essa tarefa.
+
+```powershell
+.\eng\update-user-secrets.ps1
+```
+
+> Pronto! Agora você já pode abris os projetos e codificar como preferir
+
+- `components/service` - Solução .NET | Visual Studio (VSCode) com backend
+- `components/ui/fluxo-caixa` - Aplicação Angular Node.js
+
+Recomendamos abrir cada uma separadamente em seu editor favorito para editar
+e depurar, bem como executar de forma independente cada componente. Assim
+você pode simular situações onde alguns componentes ficam indisponíveis.

@@ -12,7 +12,7 @@ public interface ILancamentoAppRepository
     /// </summary>
     /// <param name="filtro">Dados do filtro</param>
     /// <returns>Total de lançamentos</returns>
-    Task<int> ContarLancamentosPorFiltroAsync(
+    Task<long> ContarLancamentosPorFiltroAsync(
         string identificadorDono,
         FiltroLancamentoModel filtro,
         CancellationToken cancellationToken);
