@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { AppUserInfo } from '../app-user-info.model';
@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
   styleUrl: './main-navbar.component.css'
 })
 export class MainNavbarComponent {
-  constructor(private authService: AuthService) { }
+  private authService = inject(AuthService);
 
   get userInfo(): AppUserInfo | null {
     return this.authService.getUserInfo() || null;

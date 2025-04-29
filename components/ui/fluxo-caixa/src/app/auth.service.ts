@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from './auth.config';
 import { AppUserInfo } from './app-user-info.model';
@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private oAuthService: OAuthService, private router: Router) { }
+  private oAuthService = inject(OAuthService);
+  private router = inject(Router);
 
   configure(): void {
     this.oAuthService.configure(authConfig);
