@@ -7,6 +7,7 @@ using FluxoCaixa.WebApi.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProblemDetails();
+builder.Services.AddApplicationCors(builder.Configuration);
 builder.Services.AddOpenIdConnectAuthorization(builder.Configuration);
 builder.Services.AddApplicationUseCases();
 builder.Services.AddKeycloakUserIdentityGateway();
@@ -20,6 +21,7 @@ builder.Services.AddMongoDBRepositories();
 
 var app = builder.Build();
 
+app.UseCors();
 app.UseExceptionHandler();
 
 app.UseOpenIdConnectAuthorization();
