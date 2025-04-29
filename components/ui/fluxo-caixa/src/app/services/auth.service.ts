@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { authConfig } from './auth.config';
-import { AppUserInfo } from './app-user-info.model';
+import { authConfig } from '../auth.config';
+import { AppUserInfo } from '../models/app-user-info.model';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -25,6 +25,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.oAuthService.hasValidAccessToken();
+  }
+
+  getAuthorizationToken(): string | null {
+    return this.oAuthService.getAccessToken();
   }
 
   getUserInfo(): AppUserInfo | null {

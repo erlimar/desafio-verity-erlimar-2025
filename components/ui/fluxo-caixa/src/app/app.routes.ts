@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './home-page/home-page.component';
-import { AboutPageComponent } from './about-page/about-page.component';
-import { OidcGuard } from './oidc.guard';
+import { RegistrarLancamentoPageComponent } from './pages/registrar-lancamento-page/registrar-lancamento-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { OidcGuard } from './guards/oidc.guard';
 
 export const routes: Routes = [
   {
@@ -9,8 +9,8 @@ export const routes: Routes = [
     component: HomePageComponent
   },
   {
-    path: 'about',
-    component: AboutPageComponent,
+    path: 'registrar-lancamento',
+    component: RegistrarLancamentoPageComponent,
     canActivate: [OidcGuard]
   },
   {

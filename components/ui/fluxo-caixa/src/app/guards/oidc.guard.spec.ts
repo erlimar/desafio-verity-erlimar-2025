@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { OidcGuard } from './oidc.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
+import { OidcGuard } from './oidc.guard';
 
 describe('OidcGuard', () => {
   let guard: OidcGuard;

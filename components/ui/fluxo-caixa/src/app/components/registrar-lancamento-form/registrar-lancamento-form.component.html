@@ -1,0 +1,41 @@
+<ul *ngIf="generalErrors?.length">
+  @for (ge of generalErrors; track $index) {
+  <li>{{ ge }}</li>
+  }
+</ul>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label for="dataHora">Data/Hora:</label>
+    <input formControlName="dataHora" id="dataHora" type="datetime-local">
+    <div *ngIf="f['dataHora'].touched && f['dataHora'].invalid && f['dataHora'].errors">
+      <ul ngif="f['dataHora'].errors">
+        <li *ngIf="f['dataHora'].errors['required']">Data/Hora é obrigatório</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <label for="dataHora">Valor:</label>
+    <input formControlName="valor" id="valor" type="number">
+    <div *ngIf="f['valor'].touched && f['valor'].invalid && f['valor'].errors">
+      <ul ngif="f['valor'].errors">
+        <li *ngIf="f['valor'].errors['required']">Valor é obrigatório</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <label for="descricao">Descrição:</label>
+    <input formControlName="descricao" id="valor" type="text">
+    <div *ngIf="f['descricao'].touched && f['descricao'].invalid && f['descricao'].errors">
+      <ul ngif="f['descricao'].errors">
+        <li *ngIf="f['descricao'].errors['required']">Valor é obrigatório</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <span [hidden]="!sending">Enviando...</span>
+    <button [hidden]="sending" type="submit" [disabled]="form.invalid || sending">Registrar</button>
+  </div>
+</form>
