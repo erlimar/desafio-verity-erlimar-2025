@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegistrarLancamentoPageComponent } from './registrar-lancamento-page.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 describe('RegistrarLancamentoPageComponent', () => {
   let component: RegistrarLancamentoPageComponent;
@@ -8,6 +10,10 @@ describe('RegistrarLancamentoPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideOAuthClient()
+      ],
       imports: [RegistrarLancamentoPageComponent]
     })
     .compileComponents();
