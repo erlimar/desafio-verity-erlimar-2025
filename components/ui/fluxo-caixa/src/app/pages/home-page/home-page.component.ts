@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
   styleUrl: './home-page.component.css'
 })
 export class HomePageComponent {
-  constructor(private authService: AuthService) { }
+  private authService = inject(AuthService);
 
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated();

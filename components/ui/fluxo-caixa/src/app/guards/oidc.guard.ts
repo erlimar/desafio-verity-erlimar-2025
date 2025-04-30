@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -6,13 +6,13 @@ import {
   MaybeAsync,
   RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OidcGuard implements CanActivate {
-  constructor(private authService: AuthService) { }
+  private authService = inject(AuthService);
 
   /* eslint-disable  @typescript-eslint/no-unused-vars */
   canActivate(

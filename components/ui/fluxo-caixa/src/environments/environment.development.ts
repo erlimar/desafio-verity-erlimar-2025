@@ -5,5 +5,6 @@ export const environment = {
     clientId: 'webapp',
     scope: 'openid profile email',
     useHttps: false
-  }
+  },
+  apiUrlBase: 'http://localhost:5480'
 };

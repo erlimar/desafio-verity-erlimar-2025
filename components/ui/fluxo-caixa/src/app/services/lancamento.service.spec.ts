@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { OidcGuard } from './oidc.guard';
+
+import { LancamentoService } from './lancamento.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
-describe('OidcGuard', () => {
-  let guard: OidcGuard;
+describe('LancamentoService', () => {
+  let service: LancamentoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,10 +14,10 @@ describe('OidcGuard', () => {
         provideOAuthClient()
       ]
     });
-    guard = TestBed.inject(OidcGuard);
+    service = TestBed.inject(LancamentoService);
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 });

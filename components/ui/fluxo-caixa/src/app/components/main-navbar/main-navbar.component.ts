@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { AppUserInfo } from '../app-user-info.model';
+import { AuthService } from '../../services/auth.service';
+import { AppUserInfo } from '../../models/app-user-info.model';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-main-navbar',
@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
   styleUrl: './main-navbar.component.css'
 })
 export class MainNavbarComponent {
-  constructor(private authService: AuthService) { }
+  private authService = inject(AuthService);
 
   get userInfo(): AppUserInfo | null {
     return this.authService.getUserInfo() || null;
